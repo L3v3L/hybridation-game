@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 export default class extends Phaser.Sprite {
-    constructor ({game, x, y, asset, name, width, height, arrayMap}) {
+    constructor ({game, x, y, asset, name, width, height, arrayMap, player, state}) {
         super(game, x, y, asset);
         this.anchor.setTo(0.5);
         this.inputEnabled = true;
@@ -10,6 +10,8 @@ export default class extends Phaser.Sprite {
         this.width = width;
         this.height = height;
         this.arrayMap = arrayMap;
+        this.player = player;
+        this.state = state;
     }
 
     update () {
@@ -17,7 +19,7 @@ export default class extends Phaser.Sprite {
 
     mclick () {
         //check if player action enabled
-        if (this.game.global.PLAYER_ENABLED) {
+        if (this.game.global.PLAYER_ENABLED && this.player === 1) {
             if (this.game.global.SELECTED_CELL != null) {
                 this.game.global.SELECTED_CELL.asset.tint = Phaser.Color.WHITE;
             }

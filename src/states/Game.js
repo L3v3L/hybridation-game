@@ -29,10 +29,34 @@ export default class extends Phaser.State {
                 height: $cellHeight,
                 asset: 'hexagon',
                 id: $cellArray[i].id,
-                arrayMap: $cellArray[i]
+                arrayMap: $cellArray[i],
+                player: (Math.floor(Math.random() * 5) + 1),
+                state: 1
             });
 
-            hexagon.tint = Phaser.Color.AQUA;
+            switch (hexagon.player) {
+                case 0:
+                    hexagon.tint = Phaser.Color.RED;
+                    break;
+                case 1:
+                    hexagon.tint = Phaser.Color.VIOLET;
+                    break;
+                case 2:
+                    hexagon.tint = Phaser.Color.AQUA;
+                    break;
+                case 3:
+                    hexagon.tint = Phaser.Color.GREEN;
+                    break;
+                case 4:
+                    hexagon.tint = Phaser.Color.YELLOW;
+                    break;
+                case 5:
+                    hexagon.tint = Phaser.Color.ORANGE;
+                    break;
+                default:
+                    hexagon.tint = Phaser.Color.WHITE;
+            }
+
             $cellArray[i].asset = hexagon;
 
             this.game.add.existing(hexagon);
