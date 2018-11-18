@@ -31,6 +31,7 @@ export default class extends Phaser.State {
                 id: $cellArray[i].id,
                 arrayMap: $cellArray[i],
                 player: (Math.floor(Math.random() * 5) + 1),
+                attack: (Math.floor(Math.random() * 24) + 1),
                 state: 1
             });
 

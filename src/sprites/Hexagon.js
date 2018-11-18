@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 export default class extends Phaser.Sprite {
-    constructor ({game, x, y, asset, name, width, height, arrayMap, player, state}) {
+    constructor ({game, x, y, asset, name, width, height, arrayMap, player, state, attack}) {
         super(game, x, y, asset);
         this.anchor.setTo(0.5);
         this.inputEnabled = true;
@@ -12,6 +12,7 @@ export default class extends Phaser.Sprite {
         this.arrayMap = arrayMap;
         this.player = player;
         this.state = state;
+        this.attack = attack;
     }
 
     update () {
