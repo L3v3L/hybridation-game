@@ -24,5 +24,5 @@ yarn
 
 then build the project in dev enviroment (this should start a live loader in your browser):
 ```shell
-yarn dev
+yarn run dev
 ```
