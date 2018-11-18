@@ -39,7 +39,9 @@ export default class extends Phaser.State {
         }
 
         this.game.global.ALL_CELLS = $cellArray;
-        //TODO draw Tiles
+
+        //enable player
+        this.game.global.PLAYER_ENABLED = true;
     }
 
     initGlobals () {

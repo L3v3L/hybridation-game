@@ -16,10 +16,13 @@ export default class extends Phaser.Sprite {
     }
 
     mclick () {
-        if (this.game.global.SELECTED_CELL != null) {
-            this.game.global.SELECTED_CELL.asset.tint = Phaser.Color.WHITE;
+        //check if player action enabled
+        if (this.game.global.PLAYER_ENABLED) {
+            if (this.game.global.SELECTED_CELL != null) {
+                this.game.global.SELECTED_CELL.asset.tint = Phaser.Color.WHITE;
+            }
+            this.game.global.SELECTED_CELL = this.arrayMap;
+            this.tint = Phaser.Color.RED;
         }
-        this.game.global.SELECTED_CELL = this.arrayMap;
-        this.tint = Phaser.Color.RED;
     }
 }
