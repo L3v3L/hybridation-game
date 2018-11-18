@@ -62,7 +62,7 @@ export default class extends Phaser.State {
 
             this.game.add.existing(hexagon);
 
-            var textStyle = {
+            let textStyle = {
                 font: '8pt Consolas',
                 fill: 'white',
                 stroke: true,
@@ -71,7 +71,7 @@ export default class extends Phaser.State {
                 align: 'center'
             };
 
-            var attackText = this.game.add.text(hexagon.centerX, hexagon.centerY + 2, hexagon.attack, textStyle);
+            let attackText = this.game.add.text(hexagon.centerX, hexagon.centerY + 2, hexagon.attack, textStyle);
             attackText.smoothed = false;
             attackText.setShadow(1, 1, 'rgba(0,0,0,1)', 0);
             attackText.anchor.set(0.5);
