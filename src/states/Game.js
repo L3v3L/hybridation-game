@@ -67,6 +67,24 @@ export default class extends Phaser.State {
 
         //enable player
         this.game.global.PLAYER_ENABLED = true;
+
+        //end turn button
+        let endTurnButton = this.game.add.button(
+            this.game.world.centerX,
+            100,
+            'btn',
+            this.endTurnAction,
+            this,
+            0,
+            1,
+            2,
+            3);
+        endTurnButton.width = 150;
+        endTurnButton.height = 50;
+        endTurnButton.anchor.x = 0.5;
+        endTurnButton.anchor.y = 0.5;
+        endTurnButton.input.useHandCursor = true;
+        endTurnButton.tint = Phaser.Color.AQUA;
     }
 
     initGlobals () {
@@ -129,5 +147,10 @@ export default class extends Phaser.State {
         }
 
         return $cellArray;
+    }
+
+    endTurnAction () {
+        //TODO actions when turn has ended
+        this.game.global.PLAYER_ENABLED = false;
     }
 }
