@@ -166,5 +166,7 @@ export default class extends Phaser.State {
     endTurnAction () {
         //TODO actions when turn has ended
         this.game.global.PLAYER_ENABLED = false;
+        //TODO change SELECTED_CELL to correct tint
+        this.game.global.SELECTED_CELL = null;
     }
 }
