@@ -5,7 +5,7 @@ import TextButton from '../extensions/TextButton';
 import Cell from '../classes/Cell';
 import globals from '../globals';
 import { clone, random } from 'lodash';
-import Player from "../classes/Player";
+import Player from '../classes/Player';
 import Hud from '../classes/Hud.js';
 
 export default class extends Phaser.State {
