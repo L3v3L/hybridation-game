@@ -34,7 +34,7 @@ export default class extends Phaser.State {
 
         //generate players
         for (let i = 0; i < $numberPlayers; i++) {
-            this.game.global.PLAYER_ARRAY.push(new Player(i, '', $acceptedPlayerColors[i % $acceptedPlayerColors.length]));
+            this.game.global.PLAYER_ARRAY.push(new Player(i, `Player ${i + 1}`, $acceptedPlayerColors[i % $acceptedPlayerColors.length]));
         }
 
         //generate tiles
@@ -57,20 +57,6 @@ export default class extends Phaser.State {
             $cellArray[i].asset = hexagon;
 
             this.game.add.existing(hexagon);
-
-            let textStyle = {
-                font: '8pt Consolas',
-                fill: 'white',
-                stroke: true,
-                strokeWidth: 1,
-                wordWrap: false,
-                align: 'center'
-            };
-
-            let attackText = this.game.add.text(hexagon.centerX, hexagon.centerY + 2, hexagon.attack, textStyle);
-            attackText.smoothed = false;
-            attackText.setShadow(1, 1, 'rgba(0,0,0,1)', 0);
-            attackText.anchor.set(0.5);
         }
 
         this.game.global.ALL_CELLS = $cellArray;

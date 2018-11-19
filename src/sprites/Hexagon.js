@@ -1,56 +1,173 @@
 import Phaser from 'phaser';
 import { random } from 'lodash';
 
-export default class extends Phaser.Sprite {
+export default class extends Phaser.Group {
     constructor ({game, x, y, asset, name, width, height, arrayMap, player, state, attack}) {
         super(game, x, y, asset);
-        this.anchor.setTo(0.5);
-        this.inputEnabled = true;
-        this.events.onInputDown.add(this.mclick, this);
+        this.game = game;
+
+        this.hexagon = new Phaser.Sprite(this.game, x, y, asset);
+        this.hexagon.anchor.setTo(0.5);
+        this.hexagon.inputEnabled = true;
+        this.hexagon.events.onInputDown.add(this.mclick, this);
+        this.hexagon.tint = player.tint;
         this.custName = name;
-        this.width = width;
-        this.height = height;
+        this.hexagon.width = width;
+        this.hexagon.height = height;
         this.arrayMap = arrayMap;
         this.player = player;
-        this.tint = player.tint;
         this.state = state;
         this.attack = attack;
-    }
-
-    update () {
+        this.selected = false;
+        this.attackText = new Phaser.Text(this.game, x + 2, y + 2, attack, {
+            font: '8pt Consolas',
+            fill: 'white',
+            stroke: true,
+            strokeWidth: 1,
+            wordWrap: false,
+            align: 'center'
+        });
+        this.attackText.smoothed = false;
+        this.attackText.setShadow(1, 1, 'rgba(0,0,0,1)', 0);
+        this.attackText.anchor.set(0.5);
+        this.add(this.hexagon);
+        this.add(this.attackText);
     }
 
     mclick () {
-        //check if player action enabled
-        if (this.game.global.PLAYER_ENABLED) {
-            if (this.player.id === 1) {
-                if (this.game.global.SELECTED_CELL != null) {
-                    this.game.global.SELECTED_CELL.asset.tint = this.game.global.SELECTED_CELL.asset.player.tint;
+        let pos = this.arrayMap.getPosition();
+        console.log(`${pos}`);
+        if (this.isPlayerTurn()) {
+            if (this.isEmptySelection()) {
+                if (this.isSelectable()) {
+                    this.select();
                 }
-                this.game.global.SELECTED_CELL = this.arrayMap;
-                this.tint = Phaser.Color.RED;
-            } else if (this.game.global.SELECTED_CELL != null && this.game.global.SELECTED_CELL.asset.player.id === 1) { //attack triggered
-
-                let attacker = this.game.global.SELECTED_CELL.asset;
-                let defender = this;
-
-                //TODO display result of attack
-                if (attacker.generateAttack() > defender.generateAttack()) {
-                    defender.player = attacker.player;
-                    defender.tint = attacker.player.tint;
-                    defender.attack = attacker.attack - 1;
-                    attacker.attack = 1;
-                } else {
-                    attacker.attack = 1;
+            } else {
+                if (this.isSelected()) {
+                    this.unselect();
+                } else if (this.isAttackable()) {
+                    let attacker = this.getSelectedCell();
+                    let defender = this;
+                    this.battle(attacker, defender);
                 }
-                attacker.tint = attacker.player.tint;
-                console.log(`${attacker.lastAttack} -> ${defender.lastAttack}`);
             }
+        }
+    }
+
+    battle (attacker, defender) {
+        let success = this.attemptCapture(attacker, defender);
+
+        if (success) {
+            this.game.hud.updateMessage(`Player ${attacker.player.name} (${attacker.lastAttack}) won an attack against ${defender.player.name} (${defender.lastAttack}).`);
+            attacker.unselect();
+            defender.select();
+        } else {
+            this.game.hud.updateMessage(`Player ${attacker.player.name} (${attacker.lastAttack}) failed an attack against ${defender.player.name} (${defender.lastAttack}).`);
+            attacker.unselect();
+        }
+    }
+
+    attemptCapture (attacker, defender) {
+        let success = attacker.generateAttack() > defender.generateAttack();
+
+        if (success) {
+            defender.absorbedBy(attacker);
+        } else {
+            attacker.resetAttack();
+        }
+
+        return success;
+    }
+
+    absorbedBy (attacker) {
+        let defender = this;
+        defender.player = attacker.player;
+        defender.hexagon.tint = attacker.player.tint;
+        defender.attack = attacker.attack - 1;
+        this.updateAttackText();
+        attacker.resetAttack();
+        this.unselect();
+    }
+
+    resetAttack () {
+        this.attack = 1;
+        this.updateAttackText();
+    }
+
+    select () {
+        this.selected = true;
+        if (this.game.global.SELECTED_CELL != null) {
+            this.game.global.SELECTED_CELL.asset.hexagon.tint = this.game.global.SELECTED_CELL.asset.player.tint;
+            this.game.global.SELECTED_CELL.asset.unselect();
+        }
+
+        this.game.global.SELECTED_CELL = this.arrayMap;
+
+        this.hexagon.tint = Phaser.Color.RED;
+    }
+
+    unselect () {
+        this.selected = false;
+        if (this.game.global.SELECTED_CELL != null) {
+            this.game.global.SELECTED_CELL.asset.hexagon.tint = this.game.global.SELECTED_CELL.asset.player.tint;
+            this.game.global.SELECTED_CELL = null;
         }
     }
 
     generateAttack () {
         this.lastAttack = random(1, this.attack);
         return this.lastAttack;
+    }
+
+    isPlayerTurn () {
+        return this.game.global.PLAYER_ENABLED;
+    }
+
+    isEmptySelection () {
+        return this.game.global.SELECTED_CELL == null;
+    }
+
+    isAdjacentTo (cell) {
+        let pos = this.arrayMap.getPosition();
+        let adjPos = cell.getPosition();
+
+        console.log(`${pos[0]} ${pos[1]}`);
+        console.log(`${adjPos[0]} ${adjPos[1]}`);
+        if ((pos[0] === adjPos[0] && pos[1] === adjPos[1] + 2) ||
+            (pos[0] === adjPos[0] && pos[1] === adjPos[1] - 2) ||
+            (pos[0] === adjPos[0] + 1 && pos[1] === adjPos[1] - 1) ||
+            (pos[0] === adjPos[0] + 1 && pos[1] === adjPos[1] + 1) ||
+            (pos[0] === adjPos[0] && pos[1] === adjPos[1] + 3) ||
+            (pos[0] === adjPos[0] - 1 && pos[1] === adjPos[1] - 1) ||
+            (pos[0] === adjPos[0] - 1 && pos[1] === adjPos[1] + 1)
+        ) {
+            console.log('true');
+            return true;
+        }
+    }
+
+    getSelectedCell () {
+        if (this.game.global.SELECTED_CELL) {
+            return this.game.global.SELECTED_CELL.asset;
+        }
+    }
+
+    updateAttackText () {
+        this.attackText.text = this.attack;
+    }
+
+    isSelected () {
+        return this.selected;
+    }
+
+    isSelectable () {
+        return this.player.id === 0 && this.isSelected() === false;
+    }
+
+    isAttackable () {
+        return !this.isEmptySelection() &&
+            this.game.global.SELECTED_CELL.asset.player.id === 0 &&
+            this.player.id !== 0 &&
+            this.isAdjacentTo(this.game.global.SELECTED_CELL);
     }
 }
