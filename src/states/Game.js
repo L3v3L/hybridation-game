@@ -1,6 +1,7 @@
 //globals __DEV__
 import Phaser from 'phaser';
 import Hexagon from '../sprites/Hexagon';
+import TextButton from '../extensions/TextButton';
 import Cell from '../classes/Cell';
 import globals from '../globals';
 import { clone, random } from 'lodash';
@@ -76,23 +77,26 @@ export default class extends Phaser.State {
         //enable player
         this.game.global.PLAYER_ENABLED = true;
 
-        //end turn button
-        let endTurnButton = this.game.add.button(
-            this.game.world.centerX,
-            100,
-            'btn',
-            this.endTurnAction,
-            this,
-            0,
-            1,
-            2,
-            3);
-        endTurnButton.width = 150;
-        endTurnButton.height = 50;
-        endTurnButton.anchor.x = 0.5;
-        endTurnButton.anchor.y = 0.5;
-        endTurnButton.input.useHandCursor = true;
-        endTurnButton.tint = Phaser.Color.AQUA;
+        //add end turn button
+        let endTurnButton = new TextButton({
+            game: this.game,
+            x: this.game.world.centerX,
+            y: 100,
+            asset: 'button',
+            overFrame: 2,
+            outFrame: 1,
+            downFrame: 0,
+            upFrame: 1,
+            tint: Phaser.Color.WHITE,
+            label: 'End Turn',
+            style: {
+                font: '20px Arial',
+                fill: 'white',
+                align: 'center'
+            }
+        });
+
+        this.game.add.existing(endTurnButton);
     }
 
     initGlobals () {
