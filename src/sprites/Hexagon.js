@@ -43,6 +43,7 @@ export default class extends Phaser.Sprite {
                 } else {
                     attacker.attack = 1;
                 }
+                attacker.tint = attacker.player.tint;
                 console.log(`${attacker.lastAttack} -> ${defender.lastAttack}`);
             }
         }
