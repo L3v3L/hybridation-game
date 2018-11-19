@@ -13,7 +13,7 @@ export default class extends Phaser.State {
         this.load.setPreloadSprite(this.loaderBar);
         //load assets
         this.load.image('hexagon', 'assets/images/hexagon.png');
-        this.load.image('btn', 'assets/images/button.png');
+        this.load.atlasJSONArray('button', 'assets/images/button.png', 'assets/data/button.json');
     }
 
     create () {
