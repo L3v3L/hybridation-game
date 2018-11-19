@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Hexagon from '../sprites/Hexagon';
 import Cell from '../classes/Cell';
 import globals from '../globals';
-import { clone } from 'lodash';
+import { clone, random } from 'lodash';
 import Player from "../classes/Player";
 
 export default class extends Phaser.State {
@@ -47,8 +47,8 @@ export default class extends Phaser.State {
                 asset: 'hexagon',
                 id: $cellArray[i].id,
                 arrayMap: $cellArray[i],
-                player: (this.game.global.PLAYER_ARRAY[(Math.floor(Math.random() * this.game.global.PLAYER_ARRAY.length))]),
-                attack: (Math.floor(Math.random() * 24) + 1),
+                player: (this.game.global.PLAYER_ARRAY[random(this.game.global.PLAYER_ARRAY.length - 1)]),
+                attack: random(1, 24),
                 state: 1
             });
 

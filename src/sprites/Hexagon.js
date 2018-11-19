@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { random } from 'lodash';
 
 export default class extends Phaser.Sprite {
     constructor ({game, x, y, asset, name, width, height, arrayMap, player, state, attack}) {
@@ -48,7 +49,7 @@ export default class extends Phaser.Sprite {
     }
 
     generateAttack () {
-        this.lastAttack = (Math.floor(Math.random() * this.attack) + 1);
+        this.lastAttack = random(1, this.attack);
         return this.lastAttack;
     }
 }
