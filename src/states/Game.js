@@ -76,6 +76,8 @@ export default class extends Phaser.State {
             x: this.game.world.centerX,
             y: 100,
             asset: 'button',
+            callback: this.endTurnAction,
+            callbackContext: this,
             overFrame: 2,
             outFrame: 1,
             downFrame: 0,
@@ -157,7 +159,8 @@ export default class extends Phaser.State {
     endTurnAction () {
         //TODO actions when turn has ended
         this.game.global.PLAYER_ENABLED = false;
-        //TODO change SELECTED_CELL to correct tint
-        this.game.global.SELECTED_CELL = null;
+        if (this.game.global.SELECTED_CELL) {
+            this.game.global.SELECTED_CELL.asset.unselect();
+        }
     }
 }
