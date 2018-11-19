@@ -1,5 +1,6 @@
 export default {
     ALL_CELLS: null,
     SELECTED_CELL: null,
-    PLAYER_ENABLED: false
+    PLAYER_ENABLED: false,
+    PLAYER_ARRAY: []
 };

@@ -4,6 +4,7 @@ import Hexagon from '../sprites/Hexagon';
 import Cell from '../classes/Cell';
 import globals from '../globals';
 import { clone } from 'lodash';
+import Player from "../classes/Player";
 
 export default class extends Phaser.State {
     init () {
@@ -13,11 +14,27 @@ export default class extends Phaser.State {
     }
 
     create () {
+        const $acceptedPlayerColors = [
+            Phaser.Color.VIOLET,
+            Phaser.Color.AQUA,
+            Phaser.Color.GREEN,
+            Phaser.Color.YELLOW,
+            Phaser.Color.ORANGE,
+            Phaser.Color.BLUE
+        ];
+
+        const $numberPlayers = 5;
         let $cellWidth = 50;
         let $cellHeight = 20;
 
         //load globals
         this.initGlobals();
+
+        //generate players
+        for (let i = 0; i < $numberPlayers; i++) {
+            this.game.global.PLAYER_ARRAY.push(new Player(i, '', $acceptedPlayerColors[i % $acceptedPlayerColors.length]));
+        }
+
         //generate tiles
         let $cellArray = this.createWorldArray();
         for (let i = 0; i < $cellArray.length; i++) {
@@ -30,33 +47,10 @@ export default class extends Phaser.State {
                 asset: 'hexagon',
                 id: $cellArray[i].id,
                 arrayMap: $cellArray[i],
-                player: (Math.floor(Math.random() * 5) + 1),
+                player: (this.game.global.PLAYER_ARRAY[(Math.floor(Math.random() * this.game.global.PLAYER_ARRAY.length))]),
                 attack: (Math.floor(Math.random() * 24) + 1),
                 state: 1
             });
-
-            switch (hexagon.player) {
-                case 0:
-                    hexagon.tint = Phaser.Color.RED;
-                    break;
-                case 1:
-                    hexagon.tint = Phaser.Color.VIOLET;
-                    break;
-                case 2:
-                    hexagon.tint = Phaser.Color.AQUA;
-                    break;
-                case 3:
-                    hexagon.tint = Phaser.Color.GREEN;
-                    break;
-                case 4:
-                    hexagon.tint = Phaser.Color.YELLOW;
-                    break;
-                case 5:
-                    hexagon.tint = Phaser.Color.ORANGE;
-                    break;
-                default:
-                    hexagon.tint = Phaser.Color.WHITE;
-            }
 
             $cellArray[i].asset = hexagon;
 
