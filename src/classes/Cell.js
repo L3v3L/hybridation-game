@@ -32,7 +32,7 @@ export default class {
     }
 
     /**
-     * get an array of the corredenates connected in a certain direction
+     * get an array of the coordinates connected in a certain direction
      * @param $direction
      * @returns {*[]}
      */
