@@ -16,6 +16,7 @@ export default class extends Phaser.State {
     }
 
     create () {
+        //settings
         const $acceptedPlayerColors = [
             Phaser.Color.VIOLET,
             Phaser.Color.AQUA,
@@ -25,15 +26,13 @@ export default class extends Phaser.State {
             Phaser.Color.BLUE
         ];
 
-        const $numberPlayers = 5;
+        //load globals
+        this.initGlobals();
         let $cellWidth = 50;
         let $cellHeight = 20;
 
-        //load globals
-        this.initGlobals();
-
         //generate players
-        for (let i = 0; i < $numberPlayers; i++) {
+        for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
             this.game.global.PLAYER_ARRAY.push(new Player(i, `Player ${i + 1}`, $acceptedPlayerColors[i % $acceptedPlayerColors.length]));
         }
 
@@ -61,10 +60,11 @@ export default class extends Phaser.State {
 
         this.game.global.ALL_CELLS = $cellArray;
 
-        //enable player
-        this.game.global.PLAYER_ENABLED = true;
+        //set starting player
+        this.game.global.CURRENT_PLAYER = 0;
 
-        //HUD
+
+        //initialize HUD
         this.game.hud = new Hud({
             game: this.game,
             player: this.player
@@ -158,7 +158,9 @@ export default class extends Phaser.State {
 
     endTurnAction () {
         //TODO actions when turn has ended
-        this.game.global.PLAYER_ENABLED = false;
+        //increment current player
+        this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
+
         if (this.game.global.SELECTED_CELL) {
             this.game.global.SELECTED_CELL.asset.unselect();
         }
