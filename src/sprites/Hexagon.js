@@ -2,16 +2,14 @@ import Phaser from 'phaser';
 import { random, forEach } from 'lodash';
 
 export default class extends Phaser.Group {
-    constructor ({game, x, y, asset, name, width, height, cell, player, state, attack}) {
+    constructor ({game, x, y, asset, width, height, cell, player, state, attack}) {
         super(game, x, y, asset);
         this.game = game;
-
         this.hexagon = new Phaser.Sprite(this.game, x, y, asset);
         this.hexagon.anchor.setTo(0.5);
         this.hexagon.inputEnabled = true;
         this.hexagon.events.onInputDown.add(this.mclick, this);
         this.hexagon.tint = player.tint;
-        this.custName = name;
         this.hexagon.width = width;
         this.hexagon.height = height;
         this.cell = cell;
