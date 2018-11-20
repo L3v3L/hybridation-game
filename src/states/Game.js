@@ -4,7 +4,7 @@ import Hexagon from '../sprites/Hexagon';
 import TextButton from '../extensions/TextButton';
 import Cell from '../classes/Cell';
 import globals from '../globals';
-import { clone, random } from 'lodash';
+import { clone, forEach, random } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud.js';
 
@@ -164,5 +164,56 @@ export default class extends Phaser.State {
         if (this.game.global.SELECTED_CELL) {
             this.game.global.SELECTED_CELL.asset.unselect();
         }
+
+        if (this.game.global.CURRENT_PLAYER !== 0) {
+            let $play = this.playAI();
+            while ($play !== null) {
+                $play.attacker.battle($play.attacker, $play.defender);
+                $play = this.playAI();
+            }
+            console.log('end turn');
+        }
+
+    }
+
+    playAI () {
+        let $currentPlayer = this.game.global.CURRENT_PLAYER;
+        let $possiblePlays = [];
+
+        //find best play for each players cell
+        forEach(this.game.global.ALL_CELLS, function (cell) {
+            if (cell.asset.player.id === $currentPlayer) {
+                let $possiblePlay = null;
+                let $smallestConnectionAttack = null;
+                forEach(cell.connections, function (connection) {
+                    //find biggest diff play
+                    if (typeof connection === 'object' &&
+                        connection.asset.player.id !== cell.asset.player.id &&
+                        connection.asset.attack < cell.asset.attack &&
+                        ($smallestConnectionAttack === null || connection.asset.attack < $smallestConnectionAttack)
+                    ) {
+                        $smallestConnectionAttack = connection.asset.attack;
+                        $possiblePlay = {
+                            attacker: cell.asset,
+                            defender: connection.asset,
+                            diff: (cell.asset.attack - connection.asset.attack)
+                        };
+                    }
+                });
+                if ($possiblePlay !== null) {
+                    $possiblePlays.push($possiblePlay);
+                }
+            }
+        });
+
+        //find best play
+        let $bestPlay = null;
+        forEach($possiblePlays, function ($play) {
+            if ($bestPlay === null || $play.diff > $bestPlay.diff) {
+                $bestPlay = $play;
+            }
+        });
+
+        return $bestPlay;
     }
 }
