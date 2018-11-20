@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { random } from 'lodash';
+import { random, forEach } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, name, width, height, arrayMap, player, state, attack}) {
@@ -128,22 +128,13 @@ export default class extends Phaser.Group {
     }
 
     isAdjacentTo (cell) {
-        let pos = this.arrayMap.getPosition();
-        let adjPos = cell.getPosition();
-
-        console.log(`${pos[0]} ${pos[1]}`);
-        console.log(`${adjPos[0]} ${adjPos[1]}`);
-        if ((pos[0] === adjPos[0] && pos[1] === adjPos[1] + 2) ||
-            (pos[0] === adjPos[0] && pos[1] === adjPos[1] - 2) ||
-            (pos[0] === adjPos[0] + 1 && pos[1] === adjPos[1] - 1) ||
-            (pos[0] === adjPos[0] + 1 && pos[1] === adjPos[1] + 1) ||
-            (pos[0] === adjPos[0] && pos[1] === adjPos[1] + 3) ||
-            (pos[0] === adjPos[0] - 1 && pos[1] === adjPos[1] - 1) ||
-            (pos[0] === adjPos[0] - 1 && pos[1] === adjPos[1] + 1)
-        ) {
-            console.log('true');
-            return true;
-        }
+        let cellFound = false;
+        forEach(this.arrayMap.connections, function (value) {
+            if (value.id === cell.id) {
+                cellFound = true;
+            }
+        });
+        return cellFound;
     }
 
     getSelectedCell () {
