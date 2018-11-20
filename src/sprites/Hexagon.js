@@ -33,8 +33,6 @@ export default class extends Phaser.Group {
     }
 
     mclick () {
-        let pos = this.cell.getPosition();
-        console.log(`${pos}`);
         if (this.isPlayerTurn()) {
             if (this.isEmptySelection()) {
                 if (this.isSelectable()) {
