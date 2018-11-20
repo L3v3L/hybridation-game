@@ -108,8 +108,8 @@ export default class extends Phaser.State {
      *
      */
     createWorldArray () {
-        let $worldWidth = 40;
-        let $worldHeight = 20;
+        let $worldWidth = 10;
+        let $worldHeight = 10;
 
         let $cellArray = [];
         let $cellsToFill = [];
