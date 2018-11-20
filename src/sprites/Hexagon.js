@@ -116,7 +116,7 @@ export default class extends Phaser.Group {
     }
 
     isPlayerTurn () {
-        return this.game.global.CURRENT_PLAYER === this.player.id;
+        return this.game.global.CURRENT_PLAYER === 0;
     }
 
     isEmptySelection () {
