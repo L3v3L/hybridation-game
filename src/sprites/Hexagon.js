@@ -127,8 +127,8 @@ export default class extends Phaser.Group {
 
     isAdjacentTo (cell) {
         let cellFound = false;
-        forEach(this.cell.connections, function (value) {
-            if (typeof value === 'object' && value.id === cell.id) {
+        forEach(this.cell.connections, function (connectionCell) {
+            if (typeof connectionCell === 'object' && connectionCell.id === cell.id) {
                 cellFound = true;
             }
         });
