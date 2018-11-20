@@ -44,7 +44,7 @@ export default class extends Phaser.Group {
                 if (this.isSelected()) {
                     this.unselect();
                 } else if (this.isAttackable()) {
-                    let attacker = this.getSelectedCell();
+                    let attacker = this.getSelectedCellAsset();
                     let defender = this;
                     this.battle(attacker, defender);
                 }
@@ -135,7 +135,7 @@ export default class extends Phaser.Group {
         return cellFound;
     }
 
-    getSelectedCell () {
+    getSelectedCellAsset () {
         if (this.game.global.SELECTED_CELL) {
             return this.game.global.SELECTED_CELL.asset;
         }
