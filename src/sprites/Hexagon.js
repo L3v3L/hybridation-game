@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { random, forEach } from 'lodash';
 
 export default class extends Phaser.Group {
-    constructor ({game, x, y, asset, name, width, height, arrayMap, player, state, attack}) {
+    constructor ({game, x, y, asset, name, width, height, cell, player, state, attack}) {
         super(game, x, y, asset);
         this.game = game;
 
@@ -14,7 +14,7 @@ export default class extends Phaser.Group {
         this.custName = name;
         this.hexagon.width = width;
         this.hexagon.height = height;
-        this.arrayMap = arrayMap;
+        this.cell = cell;
         this.player = player;
         this.state = state;
         this.attack = attack;
@@ -35,7 +35,7 @@ export default class extends Phaser.Group {
     }
 
     mclick () {
-        let pos = this.arrayMap.getPosition();
+        let pos = this.cell.getPosition();
         console.log(`${pos}`);
         if (this.isPlayerTurn()) {
             if (this.isEmptySelection()) {
@@ -101,7 +101,7 @@ export default class extends Phaser.Group {
             this.game.global.SELECTED_CELL.asset.unselect();
         }
 
-        this.game.global.SELECTED_CELL = this.arrayMap;
+        this.game.global.SELECTED_CELL = this.cell;
 
         this.hexagon.tint = Phaser.Color.RED;
     }
@@ -129,7 +129,7 @@ export default class extends Phaser.Group {
 
     isAdjacentTo (cell) {
         let cellFound = false;
-        forEach(this.arrayMap.connections, function (value) {
+        forEach(this.cell.connections, function (value) {
             if (value.id === cell.id) {
                 cellFound = true;
             }

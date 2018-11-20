@@ -48,7 +48,7 @@ export default class extends Phaser.State {
                 height: $cellHeight,
                 asset: 'hexagon',
                 id: $cellArray[i].id,
-                arrayMap: $cellArray[i],
+                cell: $cellArray[i],
                 player: (this.game.global.PLAYER_ARRAY[random(this.game.global.PLAYER_ARRAY.length - 1)]),
                 attack: random(1, 24),
                 state: 1
