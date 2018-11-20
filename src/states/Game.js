@@ -63,18 +63,17 @@ export default class extends Phaser.State {
         //set starting player
         this.game.global.CURRENT_PLAYER = 0;
 
-
         //initialize HUD
         this.game.hud = new Hud({
             game: this.game,
-            player: this.player
+            player: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]
         });
 
         //add end turn button
         let endTurnButton = new TextButton({
             game: this.game,
             x: this.game.world.centerX,
-            y: 100,
+            y: 60,
             asset: 'button',
             callback: this.endTurnAction,
             callbackContext: this,
@@ -86,6 +85,7 @@ export default class extends Phaser.State {
             label: 'End Turn',
             style: {
                 font: '20px Arial',
+                fontWeight: 'bold',
                 fill: 'white',
                 align: 'center'
             }
@@ -125,7 +125,7 @@ export default class extends Phaser.State {
             let $selectedCell = $cellsToFill.pop();
             let $selectedNode = $selectedCell.findFirst(true, true);
             if ($selectedNode !== -1) {
-                //search for cell with specific coor
+                //search for cell with specific coordinate
                 let $nextCor = $selectedCell.getNextPosition($selectedNode);
                 let $connectionMade = false;
 

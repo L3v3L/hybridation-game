@@ -54,11 +54,11 @@ export default class extends Phaser.Group {
         let success = this.attemptCapture(attacker, defender);
 
         if (success) {
-            this.game.hud.updateMessage(`Player ${attacker.player.name} (${attacker.lastAttack}) won an attack against ${defender.player.name} (${defender.lastAttack}).`);
+            this.game.hud.updateMessage(`${attacker.player.name} (${attacker.lastAttack}) won an attack against ${defender.player.name} (${defender.lastAttack})`);
             attacker.unselect();
             defender.select();
         } else {
-            this.game.hud.updateMessage(`Player ${attacker.player.name} (${attacker.lastAttack}) failed an attack against ${defender.player.name} (${defender.lastAttack}).`);
+            this.game.hud.updateMessage(`${attacker.player.name} (${attacker.lastAttack}) failed an attack against ${defender.player.name} (${defender.lastAttack})`);
             attacker.unselect();
         }
     }
