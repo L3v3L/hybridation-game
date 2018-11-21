@@ -26,6 +26,16 @@ export default class Hud extends Phaser.Group {
         });
         this.playerName.anchor.setTo(0.5);
 
+        this.playerTerritory = new Phaser.Text(this.game, this.game.world.centerX, 500, this.player.territory, {
+            font: '10pt Sans',
+            fontWeight: 'bold',
+            stroke: 'black',
+            strokeThickness: 4,
+            fill: 'white',
+            align: 'center'
+        });
+        this.playerTerritory.anchor.setTo(0.5);
+
         this.endTurnButton = new TextButton({
             game: this.game,
             x: this.game.world.centerX,
@@ -49,6 +59,7 @@ export default class Hud extends Phaser.Group {
 
         //this.add(this.endTurnButton);
         this.add(this.playerName);
+        this.add(this.playerTerritory);
         this.add(this.message);
     }
 
@@ -62,7 +73,7 @@ export default class Hud extends Phaser.Group {
         this.playerName.setStyle({
             fill: Phaser.Color.getWebRGB(this.player.tint),
             stroke: 'black',
-            strokeThickness: 4,
+            strokeThickness: 4
         });
 
         if (this.player.isAI) {
@@ -77,5 +88,6 @@ export default class Hud extends Phaser.Group {
     update () {
         this.updatePlayer();
         this.playerName.text = this.player.name;
+        this.playerTerritory.text = this.player.territory;
     }
 };

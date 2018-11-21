@@ -1,14 +1,15 @@
 import {forEach, random} from 'lodash';
 
 export default class {
-    constructor (game, id, name, tint, callback) {
+    constructor (game, gamestate, id, name, tint) {
         this.id = id;
         this.game = game;
-        this.callback = callback;
+        this.gamestate = gamestate;
         this.name = name;
         this.tint = tint;
         this.isAI = false;
         this.selectedHexagon = null;
+        this.territory = 0;
         this.timer = this.game.time.create(false);
     }
 
@@ -120,6 +121,10 @@ export default class {
     }
 
     absorb (absorbedHexagon) {
+        //Before absorbing the territory, update territory count
+        this.increaseTerritory();
+        absorbedHexagon.player.decreaseTerritory();
+
         //Take the absorbedHexagon as our own
         absorbedHexagon.player = this;
 
@@ -154,7 +159,19 @@ export default class {
         }
     }
 
+    setTerritory (count) {
+        this.territory = count;
+    }
+
+    increaseTerritory () {
+        this.territory = this.territory + 1;
+    }
+
+    decreaseTerritory () {
+        this.territory = this.territory - 1;
+    }
+
     endTurn () {
-        this.callback();
+        this.gamestate.nextTurn();
     }
 }
