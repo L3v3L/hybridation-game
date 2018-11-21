@@ -26,7 +26,7 @@ export default class Hud extends Phaser.Group {
         });
         this.playerName.anchor.setTo(0.5);
 
-        this.playerTerritory = new Phaser.Text(this.game, this.game.world.centerX, 500, this.player.territory, {
+        this.playerTerritory = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.height - 20, this.player.territory, {
             font: '10pt Sans',
             fontWeight: 'bold',
             stroke: 'black',
