@@ -1,4 +1,4 @@
-import {forEach, random} from 'lodash';
+import { forEach, random } from 'lodash';
 
 export default class {
     constructor (game, gamestate, id, name, tint) {
@@ -11,6 +11,7 @@ export default class {
         this.selectedHexagon = null;
         this.territory = 0;
         this.timer = this.game.time.create(false);
+        this.clusters = [];
     }
 
     act () {
@@ -173,5 +174,27 @@ export default class {
 
     endTurn () {
         this.gamestate.nextTurn();
+    }
+
+    isCellConnectedToAnyInCellArray ($needleCell, $CellArray) {
+        let $return = false;
+        forEach($CellArray, function ($cell) {
+            if ($cell.asset.isAdjacentTo($needleCell.asset)) {
+                $return = $cell;
+                //TODO should break, or return here (see lodash foreach breaking)
+            }
+        });
+        return $return;
+    }
+
+    getHighestClusterLength () {
+        let $length = 0;
+        forEach(this.clusters, function ($cluster) {
+            let $clusterLength = $cluster.length;
+            if ($clusterLength > $length) {
+                $length = $clusterLength;
+            }
+        });
+        return $length;
     }
 }
