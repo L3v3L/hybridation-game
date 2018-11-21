@@ -149,6 +149,8 @@ export default class extends Phaser.State {
         forEach(this.game.global.PLAYER_ARRAY, function ($player) {
             //reset clusters
             $player.clusters = [];
+            //clear territory counts
+            $splayer.setTerritory(0);
         });
 
         forEach(this.game.global.ALL_CELLS, function ($cell) {
@@ -183,7 +185,6 @@ export default class extends Phaser.State {
     }
 
     nextTurn () {
-        this.updateData();
         this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
         let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
         currentPlayer.act();
