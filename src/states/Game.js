@@ -150,7 +150,7 @@ export default class extends Phaser.State {
             //reset clusters
             $player.clusters = [];
             //clear territory counts
-            $splayer.setTerritory(0);
+            $player.setTerritory(0);
         });
 
         forEach(this.game.global.ALL_CELLS, function ($cell) {
