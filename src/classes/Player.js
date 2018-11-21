@@ -133,7 +133,14 @@ export default class {
     }
 
     roll (hexagon) {
-        return random(1, hexagon.attack);
+        let $roll = 0;
+        let $n = 0;
+
+        while ($n < hexagon.attack) {
+            $roll += random(1, 6);
+            $n++;
+        }
+        return $roll;
     }
 
     clearSelection () {

@@ -58,7 +58,7 @@ export default class extends Phaser.State {
                 id: $cellArray[i].id,
                 cell: $cellArray[i],
                 player: (this.game.global.PLAYER_ARRAY[random(this.game.global.PLAYER_ARRAY.length - 1)]),
-                attack: random(1, 24),
+                attack: random(1, 6),
                 state: 1
             });
 
