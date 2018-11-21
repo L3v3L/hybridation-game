@@ -146,14 +146,8 @@ export default class extends Phaser.State {
     }
 
     updateData () {
-        let $territory = [0, 0, 0, 0, 0];
-
         forEach(this.game.global.ALL_CELLS, function ($cell) {
-            $territory[$cell.asset.player.id]++;
-        });
-
-        forEach(this.game.global.PLAYER_ARRAY, function ($player) {
-            $player.setTerritory($territory[$player.id]);
+            $cell.asset.player.increaseTerritory();
         });
     }
 
