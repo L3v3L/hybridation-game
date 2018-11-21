@@ -173,6 +173,13 @@ export default class extends Phaser.State {
                 $cell.asset.player.clusters.push([$cell]);
             }
         });
+
+        console.log('--------------------------');
+        //print highest cluster size for each player
+        forEach(this.game.global.PLAYER_ARRAY, function ($player) {
+            //reset clusters
+            console.log($player.name + ' ' + $player.getHighestClusterLength());
+        });
     }
 
     nextTurn () {

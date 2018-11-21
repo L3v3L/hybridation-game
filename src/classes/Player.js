@@ -186,4 +186,15 @@ export default class {
         });
         return $return;
     }
+
+    getHighestClusterLength () {
+        let $length = 0;
+        forEach(this.clusters, function ($cluster) {
+            let $clusterLength = $cluster.length;
+            if ($clusterLength > $length) {
+                $length = $clusterLength;
+            }
+        });
+        return $length;
+    }
 }
