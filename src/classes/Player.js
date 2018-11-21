@@ -101,6 +101,10 @@ export default class {
             //Success
             this.game.hud.updateMessage(`${this.name} (${attackerRoll}) won an attack against ${defender.player.name} (${defenderRoll})`);
             this.absorb(defender);
+            if (this.selectedHexagon.attack === 1) {
+                this.selectedHexagon.unselect();
+                this.clearSelection();
+            }
             return true;
         } else {
             //Failure
