@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Hexagon from '../sprites/Hexagon';
 import Cell from '../classes/Cell';
 import globals from '../globals';
-import {clone, random} from 'lodash';
+import { clone, forEach, random } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud';
 
@@ -144,8 +144,15 @@ export default class extends Phaser.State {
     }
 
     nextTurn () {
+        this.updateData();
         this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
         let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
         currentPlayer.act();
+    }
+
+    updateData () {
+        forEach(this.game.global.ALL_CELLS, function ($cell) {
+
+        });
     }
 }
