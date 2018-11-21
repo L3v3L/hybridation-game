@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Hexagon from '../sprites/Hexagon';
 import Cell from '../classes/Cell';
 import globals from '../globals';
-import {clone, forEach, random} from 'lodash';
+import { clone, forEach, random } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud';
 
@@ -146,8 +146,32 @@ export default class extends Phaser.State {
     }
 
     updateData () {
+        forEach(this.game.global.PLAYER_ARRAY, function ($player) {
+            //reset clusters
+            $player.clusters = [];
+        });
+
         forEach(this.game.global.ALL_CELLS, function ($cell) {
             $cell.asset.player.increaseTerritory();
+
+            let $alreadyfoundIn = null;
+            forEach($cell.asset.player.clusters, function ($cluster) {
+                let $isCellConnectedToAnyInCellArray = $cell.asset.player.isCellConnectedToAnyInCellArray($cell, $cluster);
+                if ($isCellConnectedToAnyInCellArray) {
+                    if ($alreadyfoundIn) {
+                        $alreadyfoundIn = $alreadyfoundIn.concat($cluster);
+                        //todo need to remove cluster from array;
+                        $cluster = null;
+                    } else {
+                        $cluster.push($cell);
+                        $alreadyfoundIn = $cluster;
+                    }
+                }
+            });
+
+            if (!$alreadyfoundIn) {
+                $cell.asset.player.clusters.push([$cell]);
+            }
         });
     }
 
