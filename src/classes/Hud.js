@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import TextButton from '../extensions/TextButton';
 
 export default class Hud extends Phaser.Group {
     constructor ({game, player}) {
@@ -25,8 +26,30 @@ export default class Hud extends Phaser.Group {
         });
         this.playerName.anchor.setTo(0.5);
 
-        this.add(this.message);
+        this.endTurnButton = new TextButton({
+            game: this.game,
+            x: this.game.world.centerX,
+            y: 60,
+            asset: 'button',
+            callback: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER].endTurn,
+            callbackContext: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER],
+            overFrame: 2,
+            outFrame: 1,
+            downFrame: 0,
+            upFrame: 1,
+            tint: Phaser.Color.WHITE,
+            label: 'End Turn',
+            style: {
+                font: '20px Arial',
+                fontWeight: 'bold',
+                fill: 'white',
+                align: 'center'
+            }
+        });
+
+        //this.add(this.endTurnButton);
         this.add(this.playerName);
+        this.add(this.message);
     }
 
     updateMessage (message) {
@@ -35,6 +58,20 @@ export default class Hud extends Phaser.Group {
 
     updatePlayer () {
         this.player = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
+
+        this.playerName.setStyle({
+            fill: Phaser.Color.getWebRGB(this.player.tint),
+            stroke: 'black',
+            strokeThickness: 4,
+        });
+
+        if (this.player.isAI) {
+            this.removeChild(this.endTurnButton);
+            this.message.y = 60;
+        } else {
+            this.addChild(this.endTurnButton);
+            this.message.y = 100;
+        }
     }
 
     update () {
