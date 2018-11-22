@@ -1,65 +1,68 @@
 import Phaser from 'phaser';
 import TextButton from '../extensions/TextButton';
+import PlayerBadge from '../classes/PlayerBadge';
+import { forEach } from 'lodash';
 
 export default class Hud extends Phaser.Group {
     constructor ({game, player}) {
         super(game);
         this.game = game;
-        this.player = player;
+        this.currentPlayer = player;
         this.width = 800;
 
         this.messageLabel = '';
-        this.message = new Phaser.Text(this.game, this.game.world.centerX, 100, this.messageLabel, {
-            font: '10pt Verdana',
+        this.message = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.height - 10, this.messageLabel, {
+            font: '16px KenVector Future',
             fill: 'black',
             align: 'center'
         });
         this.message.anchor.setTo(0.5);
 
-        this.playerName = new Phaser.Text(this.game, this.game.world.centerX, 25, this.player.name, {
-            font: '20pt Sans',
-            fontWeight: 'bold',
-            stroke: 'black',
-            strokeThickness: 4,
-            fill: 'white',
-            align: 'center'
-        });
-        this.playerName.anchor.setTo(0.5);
-
-        this.playerTerritory = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.height - 20, this.player.territory, {
-            font: '10pt Sans',
-            fontWeight: 'bold',
-            stroke: 'black',
-            strokeThickness: 4,
-            fill: 'white',
-            align: 'center'
-        });
-        this.playerTerritory.anchor.setTo(0.5);
+        this.playerBadges = [];
+        for (let [index, value] of this.game.global.PLAYER_ARRAY.entries()) {
+            this.playerBadges.push(new PlayerBadge({
+                game: this.game,
+                player: value,
+                x: (index * 140) + 60,
+                y: 20
+            }));
+        }
+        //
+        //for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS;  i++) {
+        //    this.playerBadges.push(new PlayerBadge({
+        //        game: this.game,
+        //        player: this.game.global.PLAYER_ARRAY[i],
+        //        x: (i * 140) + 60,
+        //        y: 20
+        //    }));
+        //}
 
         this.endTurnButton = new TextButton({
             game: this.game,
-            x: this.game.world.centerX,
-            y: 60,
-            asset: 'button',
+            x: 120,
+            y: 65,
+            asset: 'greySheet',
             callback: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER].endTurn,
             callbackContext: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER],
-            overFrame: 2,
-            outFrame: 1,
-            downFrame: 0,
-            upFrame: 1,
-            tint: Phaser.Color.WHITE,
-            label: 'End Turn',
+            overFrame: 'sliderRight',
+            outFrame: 'sliderRight',
+            downFrame: 'sliderRight',
+            upFrame: 'sliderRight',
+            tint: this.currentPlayer.tint,
+            label: 'end',
             style: {
-                font: '20px Arial',
-                fontWeight: 'bold',
+                font: '11px KenVector Future Thin',
                 fill: 'white',
                 align: 'center'
-            }
+            },
+            textX: -1,
+            textY: 0
         });
 
-        //this.add(this.endTurnButton);
-        this.add(this.playerName);
-        this.add(this.playerTerritory);
+        for (let $playerBadge of this.playerBadges) {
+            this.add($playerBadge);
+        }
+
         this.add(this.message);
     }
 
@@ -67,27 +70,28 @@ export default class Hud extends Phaser.Group {
         this.message.text = this.messageLabel + message;
     }
 
-    updatePlayer () {
-        this.player = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
+    updatePlayers () {
+        this.currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
 
-        this.playerName.setStyle({
-            fill: Phaser.Color.getWebRGB(this.player.tint),
-            stroke: 'black',
-            strokeThickness: 4
-        });
+        for (let [index, player] of this.game.global.PLAYER_ARRAY.entries()) {
+            this.playerBadges[index].updateName(player.name);
+            this.playerBadges[index].updateTerritory(player.territory);
+            this.playerBadges[index].updateScore(player.score);
 
-        if (this.player.isAI) {
-            this.removeChild(this.endTurnButton);
-            this.message.y = 60;
-        } else {
-            this.addChild(this.endTurnButton);
-            this.message.y = 100;
+            if (index === this.game.global.CURRENT_PLAYER) {
+                this.playerBadges[index].activate();
+            } else {
+                this.playerBadges[index].deactivate();
+            }
         }
     }
 
     update () {
-        this.updatePlayer();
-        this.playerName.text = this.player.name;
-        this.playerTerritory.text = this.player.territory;
+        this.updatePlayers();
+        if (this.currentPlayer.isAI) {
+            this.removeChild(this.endTurnButton);
+        } else {
+            this.addChild(this.endTurnButton);
+        }
     }
 };

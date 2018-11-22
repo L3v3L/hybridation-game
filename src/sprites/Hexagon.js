@@ -5,6 +5,7 @@ export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, cell, player, state, attack}) {
         super(game, x, y, asset);
         this.game = game;
+
         this.hexagon = new Phaser.Sprite(this.game, x, y, asset);
         this.hexagon.anchor.setTo(0.5);
         this.hexagon.inputEnabled = true;
@@ -12,15 +13,16 @@ export default class extends Phaser.Group {
         this.hexagon.tint = player.tint;
         this.hexagon.width = width;
         this.hexagon.height = height;
+
         this.cell = cell;
         this.player = player;
         this.state = state;
         this.attack = attack;
         this.selected = false;
         this.attackText = new Phaser.Text(this.game, x + 2, y + 2, attack, {
-            font: '8pt Consolas',
-            fill: 'white',
-            stroke: true,
+            font: '18px KenVector Future ',
+            fill: 'black',
+            stroke: false,
             strokeWidth: 1,
             wordWrap: false,
             align: 'center'
