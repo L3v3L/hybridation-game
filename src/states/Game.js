@@ -97,8 +97,8 @@ export default class extends Phaser.State {
      *
      */
     createWorldArray () {
-        let $worldWidth = 10;
-        let $worldHeight = 10;
+        let $worldWidth = this.game.global.WORLD_WIDTH;
+        let $worldHeight = this.game.global.WORLD_HEIGHT;
 
         let $cellArray = [];
         let $cellsToFill = [];
@@ -178,7 +178,7 @@ export default class extends Phaser.State {
         console.log('--------------------------');
         //print highest cluster size for each player
         forEach(this.game.global.PLAYER_ARRAY, function ($player) {
-            //reset clusters
+            $player.refreshScore();
             console.log($player.name + ' ' + $player.getHighestClusterLength());
         });
     }

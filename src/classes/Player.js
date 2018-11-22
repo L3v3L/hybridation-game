@@ -10,6 +10,7 @@ export default class {
         this.isAI = false;
         this.selectedHexagon = null;
         this.territory = 0;
+        this.score = 0;
         this.timer = this.game.time.create(false);
         this.clusters = [];
     }
@@ -158,6 +159,22 @@ export default class {
             this.selectedHexagon.unselect();
             this.selectedHexagon = null;
         }
+    }
+
+    refreshScore () {
+        this.score = this.getHighestClusterLength();
+    }
+
+    getScore (score) {
+        return this.score;
+    }
+
+    setScore (score) {
+        this.score = score;
+    }
+
+    getTerritory (count) {
+        this.territory = count;
     }
 
     setTerritory (count) {
