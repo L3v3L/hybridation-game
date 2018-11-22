@@ -4,3 +4,9 @@
     font-weight: 400;
     src: url("../fonts/kenvector_future.ttf") format('truetype');
 }
+@font-face {
+    font-family : "KenVector Future Thin";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/kenvector_future_thin.ttf") format('truetype');
+}
