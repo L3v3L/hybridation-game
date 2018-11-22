@@ -185,7 +185,7 @@ export default class extends Phaser.State {
     }
 
     nextTurn () {
-        this.update();
+        this.updateData();
         this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
         let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
         currentPlayer.act();
