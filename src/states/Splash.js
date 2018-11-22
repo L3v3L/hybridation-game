@@ -14,6 +14,7 @@ export default class extends Phaser.State {
         //load assets
         this.load.image('hexagon', 'assets/images/hexagon.png');
         this.load.atlasJSONArray('button', 'assets/images/button.png', 'assets/data/button.json');
+        this.load.atlasJSONArray('greySheet', 'assets/images/greySheet.png', 'assets/data/greySheet.json');
     }
 
     create () {

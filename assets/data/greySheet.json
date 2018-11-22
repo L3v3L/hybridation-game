@@ -1,0 +1,56 @@
+{"frames": [
+  {
+    "filename": "greyBox",
+    "frame": {"x":147,"y":433,"w":38,"h":36},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":38,"h":36},
+    "sourceSize": {"w":38,"h":36}
+  },
+  {
+    "filename": "button0",
+    "frame": {"x":0,"y":143,"w":190,"h":45},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":190,"h":45},
+    "sourceSize": {"w":190,"h":45}
+  },
+  {
+    "filename": "button1",
+    "frame": {"x":0,"y":188,"w":190,"h":49},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":190,"h":49},
+    "sourceSize": {"w":190,"h":49}
+  },
+  {
+    "filename": "button2",
+    "frame": {"x":0,"y":98,"w":190,"h":45},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":190,"h":45},
+    "sourceSize": {"w":190,"h":45}
+  },
+  {
+    "filename": "sliderRight",
+    "frame": {"x":39,"y":478,"w":39,"h":31},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":39,"h":31},
+    "sourceSize": {"w":39,"h":31}
+  },
+  {
+    "filename": "greyPanel",
+    "frame": {"x":190,"y":98,"w":100,"h":100},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+    "sourceSize": {"w":100,"h":100}
+  }],
+  "meta": {
+    "version": "1.0",
+    "image": "greySheet.png",
+    "size": {"w":512,"h":512},
+    "scale": "1"
+  }
+}
