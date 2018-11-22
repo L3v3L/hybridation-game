@@ -45,6 +45,27 @@ export default class extends Phaser.State {
             this.game.global.PLAYER_ARRAY[i].isAI = true;
         }
 
+        //generate shadow
+        let $shadowArray = this.createWorldArray();
+        for (let i = 0; i < $shadowArray.length; i++) {
+            let $hexagonShadow = new Phaser.Sprite(
+                this.game,
+                ($shadowArray[i].x * (($cellWidth / 4) * 3)) + this.game.world.centerX + 5,
+                ($shadowArray[i].y * ($cellHeight / 2)) + this.game.world.centerY + 5,
+                'hexagon');
+            $hexagonShadow.anchor.setTo(0.5);
+            $hexagonShadow.inputEnabled = false;
+            $hexagonShadow.tint = 'black';
+            $hexagonShadow.width = $cellWidth;
+            $hexagonShadow.height = $cellHeight;
+
+            $shadowArray[i].asset = $hexagonShadow;
+
+            this.game.add.existing($hexagonShadow);
+
+            $hexagonShadow.sendToBack();
+        }
+
         //generate tiles
         let $cellArray = this.createWorldArray();
         for (let i = 0; i < $cellArray.length; i++) {
@@ -175,11 +196,8 @@ export default class extends Phaser.State {
             }
         });
 
-        console.log('--------------------------');
-        //print highest cluster size for each player
         forEach(this.game.global.PLAYER_ARRAY, function ($player) {
             $player.refreshScore();
-            console.log($player.name + ' ' + $player.getHighestClusterLength());
         });
     }
 
