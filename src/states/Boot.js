@@ -26,6 +26,9 @@ export default class extends Phaser.State {
         });
         text.anchor.setTo(0.5, 0.5);
 
+        //HACK TO PRELOAD A CUSTOM FONT
+        this.game.add.text(0, 0, 'hack', {font: '1px KenVector Future', fill: '#FFFFFF'});
+
         this.load.image('loaderBg', './assets/images/loader-bg.png');
         this.load.image('loaderBar', './assets/images/loader-bar.png');
     }
