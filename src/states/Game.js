@@ -28,7 +28,7 @@ export default class extends Phaser.State {
         //load globals
         this.initGlobals();
         let $cellWidth = 50;
-        let $cellHeight = 20;
+        let $cellHeight = 50;
 
         //generate players
         for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
