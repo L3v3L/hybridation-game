@@ -53,6 +53,7 @@ export default class extends Phaser.Group {
         forEach(this.cell.connections, function (connectionCell) {
             if (typeof connectionCell === 'object' && connectionCell.id === hexagon.cell.id) {
                 cellFound = true;
+                return false;
             }
         });
         return cellFound;

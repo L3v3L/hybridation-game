@@ -181,7 +181,7 @@ export default class {
         forEach($CellArray, function ($cell) {
             if ($cell.asset.isAdjacentTo($needleCell.asset)) {
                 $return = $cell;
-                //TODO should break, or return here (see lodash foreach breaking)
+                return false;
             }
         });
         return $return;

@@ -162,7 +162,6 @@ export default class extends Phaser.State {
                 if ($isCellConnectedToAnyInCellArray) {
                     if ($alreadyfoundIn) {
                         $alreadyfoundIn = $alreadyfoundIn.concat($cluster);
-                        //todo need to remove cluster from array;
                         $cluster = null;
                     } else {
                         $cluster.push($cell);
