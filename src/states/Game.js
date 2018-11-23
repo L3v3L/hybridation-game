@@ -204,8 +204,34 @@ export default class extends Phaser.State {
 
     nextTurn () {
         this.updateData();
+        this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
+
         this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
         let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
         currentPlayer.act();
+    }
+
+    distribuiteAttack ($player) {
+        //get largest chain
+        let $highestChain = $player.getHighestClusterLength();
+        let $playersCells = $player.getAllCellsInAllClusters();
+
+        if ($playersCells.length) {
+            for (let i = 0; i < $highestChain; i++) {
+                if (!$playersCells.length) {
+                    break;
+                }
+
+                let randomCellId = random($playersCells.length - 1);
+                //remove cell if reached max
+                if ($playersCells[randomCellId].asset.attack >= this.game.global.MAX_ATTACK) {
+                    $playersCells.splice(randomCellId, 1);
+                    i--;
+                    continue;
+                }
+
+                $playersCells[randomCellId].asset.increaseAttack();
+            }
+        }
     }
 }

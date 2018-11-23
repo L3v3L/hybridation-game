@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {forEach} from 'lodash';
+import { forEach } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, cell, player, state, attack}) {
@@ -71,5 +71,10 @@ export default class extends Phaser.Group {
 
     isOwnedBy (playerId) {
         return playerId === this.player.id;
+    }
+
+    increaseAttack () {
+        this.attack = this.attack + 1;
+        this.updateAttackText();
     }
 }

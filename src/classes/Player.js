@@ -47,7 +47,8 @@ export default class {
                     //find biggest diff play
                     if (typeof connection === 'object' &&
                         connection.asset.player.id !== cell.asset.player.id &&
-                        connection.asset.attack < cell.asset.attack &&
+                        cell.asset.attack > 1 &&
+                        connection.asset.attack <= cell.asset.attack &&
                         ($smallestConnectionAttack === null || connection.asset.attack < $smallestConnectionAttack)
                     ) {
                         $smallestConnectionAttack = connection.asset.attack;
@@ -213,5 +214,15 @@ export default class {
             }
         });
         return $length;
+    }
+
+    getAllCellsInAllClusters () {
+        let $cells = [];
+        forEach(this.clusters, function ($cluster) {
+            forEach($cluster, function ($cell) {
+                $cells.push($cell);
+            });
+        });
+        return $cells;
     }
 }
