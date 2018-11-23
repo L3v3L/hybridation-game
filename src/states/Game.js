@@ -178,20 +178,21 @@ export default class extends Phaser.State {
             $cell.asset.player.increaseTerritory();
 
             let $alreadyfoundIn = null;
-            forEach($cell.asset.player.clusters, function ($cluster) {
+            forEach($cell.asset.player.clusters, function ($cluster, $key) {
                 let $isCellConnectedToAnyInCellArray = $cell.asset.player.isCellConnectedToAnyInCellArray($cell, $cluster);
                 if ($isCellConnectedToAnyInCellArray) {
-                    if ($alreadyfoundIn) {
-                        $alreadyfoundIn = $alreadyfoundIn.concat($cluster);
+                    if ($alreadyfoundIn !== null) {
+                        $cell.asset.player.clusters[$alreadyfoundIn] = $cell.asset.player.clusters[$alreadyfoundIn].concat($cluster);
+                        $cell.asset.player.clusters[$key] = [];
                         $cluster = null;
                     } else {
                         $cluster.push($cell);
-                        $alreadyfoundIn = $cluster;
+                        $alreadyfoundIn = $key;
                     }
                 }
             });
 
-            if (!$alreadyfoundIn) {
+            if ($alreadyfoundIn === null) {
                 $cell.asset.player.clusters.push([$cell]);
             }
         });
