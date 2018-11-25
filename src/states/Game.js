@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Hexagon from '../sprites/Hexagon';
 import Cell from '../classes/Cell';
 import globals from '../globals';
-import { clone, forEach, random, shuffle } from 'lodash';
+import { clone, forEach, random, shuffle, floor } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud';
 
@@ -71,7 +71,10 @@ export default class extends Phaser.State {
         this.game.global.ALL_CELLS = $cellArray;
 
         let createPlayerAssignmentArray = this.createPlayerAssignmentArray();
+        let attackAssignmentArray = this.createAttackAssignmentArray();
+
         for (let i = 0; i < $cellArray.length; i++) {
+            let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % $cellArray.length]]);
             let hexagon = new Hexagon({
                 game: this.game,
                 x: ($cellArray[i].x * (($cellWidth / 4) * 3)) + this.game.world.centerX,
@@ -81,8 +84,8 @@ export default class extends Phaser.State {
                 asset: 'hexagon',
                 id: $cellArray[i].id,
                 cell: $cellArray[i],
-                player: (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % $cellArray.length]]),
-                attack: random(1, 6),
+                player: player,
+                attack: attackAssignmentArray[player.id].pop(),
                 state: 1
             });
 
@@ -129,6 +132,39 @@ export default class extends Phaser.State {
         }
 
         return shuffle($playerAssignmentArray);
+    }
+
+    createAttackAssignmentArray () {
+        let $countCells = this.game.global.ALL_CELLS.length;
+        let $countPlayers = this.game.global.PLAYER_ARRAY.length;
+        let $amountCellsEachPlayer = $countCells / $countPlayers;
+
+        let $divider = (100 - $amountCellsEachPlayer) * 0.01;
+        let $pie = $amountCellsEachPlayer;
+        let $minAttack = 1;
+        let $attackAssignmentArray = [];
+        let $playerAttackArray = [];
+
+        while ($pie > 1) {
+            let $divided = floor($pie * $divider);
+            let $toFill = $pie - $divided;
+            //fill
+            for (let i = 0; i < $toFill; i++) {
+                $playerAttackArray.push($minAttack > this.game.global.MAX_ATTACK ? 1 : $minAttack);
+            }
+            $minAttack++;
+            $pie = $divided;
+        }
+
+        while ($playerAttackArray.length < $amountCellsEachPlayer) {
+            $playerAttackArray.push(1);
+        }
+
+        for (let i = 0; i < $countPlayers; i++) {
+            $attackAssignmentArray[i] = shuffle($playerAttackArray);
+        }
+
+        return $attackAssignmentArray;
     }
 
     /**
