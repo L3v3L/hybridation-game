@@ -1,13 +1,13 @@
 import { forEach, random } from 'lodash';
 
 export default class {
-    constructor (game, gamestate, id, name, tint) {
+    constructor (game, gamestate, id, name, tint, isAI) {
         this.id = id;
         this.game = game;
         this.gamestate = gamestate;
         this.name = name;
         this.tint = tint;
-        this.isAI = false;
+        this.isAI = isAI;
         this.selectedHexagon = null;
         this.territory = 0;
         this.score = 0;

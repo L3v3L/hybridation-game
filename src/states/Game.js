@@ -37,13 +37,13 @@ export default class extends Phaser.State {
                 this,
                 i,
                 `Player ${i + 1}`,
-                $acceptedPlayerColors[i % $acceptedPlayerColors.length]
+                $acceptedPlayerColors[i % $acceptedPlayerColors.length],
+                true
             ));
         }
 
-        for (let i = 1; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
-            this.game.global.PLAYER_ARRAY[i].isAI = true;
-        }
+        //config user player
+        this.game.global.PLAYER_ARRAY[0].isAI = false;
 
         //generate shadow
         let $shadowArray = this.createWorldArray();
