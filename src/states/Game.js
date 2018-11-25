@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Hexagon from '../sprites/Hexagon';
 import Cell from '../classes/Cell';
 import globals from '../globals';
-import { clone, forEach, random } from 'lodash';
+import { clone, forEach, random, shuffle } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud';
 
@@ -68,6 +68,9 @@ export default class extends Phaser.State {
 
         //generate tiles
         let $cellArray = this.createWorldArray();
+        this.game.global.ALL_CELLS = $cellArray;
+
+        let createPlayerAssignmentArray = this.createPlayerAssignmentArray();
         for (let i = 0; i < $cellArray.length; i++) {
             let hexagon = new Hexagon({
                 game: this.game,
@@ -78,7 +81,7 @@ export default class extends Phaser.State {
                 asset: 'hexagon',
                 id: $cellArray[i].id,
                 cell: $cellArray[i],
-                player: (this.game.global.PLAYER_ARRAY[random(this.game.global.PLAYER_ARRAY.length - 1)]),
+                player: (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % $cellArray.length]]),
                 attack: random(1, 6),
                 state: 1
             });
@@ -87,8 +90,6 @@ export default class extends Phaser.State {
 
             this.game.add.existing(hexagon);
         }
-
-        this.game.global.ALL_CELLS = $cellArray;
 
         //set starting player
         this.game.global.CURRENT_PLAYER = 0;
@@ -112,6 +113,22 @@ export default class extends Phaser.State {
         if (__DEV__) {
             //this.game.debug.spriteInfo(this.hexagon, 32, 32);
         }
+    }
+
+    createPlayerAssignmentArray () {
+        let $playerAssignmentArray = [];
+        let $countCells = this.game.global.ALL_CELLS.length;
+        let $countPlayers = this.game.global.PLAYER_ARRAY.length;
+        //todo handle floats
+        let $amountCellsEachPlayer = $countCells / $countPlayers;
+
+        for (let i = 0; i < $countPlayers; i++) {
+            for (let j = 0; j < $amountCellsEachPlayer; j++) {
+                $playerAssignmentArray.push(i);
+            }
+        }
+
+        return shuffle($playerAssignmentArray);
     }
 
     /**
