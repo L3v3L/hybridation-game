@@ -203,12 +203,32 @@ export default class extends Phaser.State {
     }
 
     nextTurn () {
-        this.updateData();
-        this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
+        if (this.checkGameEnded()) {
+            console.log('game ended');
+        } else {
+            this.updateData();
+            this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
 
-        this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
-        let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
-        currentPlayer.act();
+            this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
+            let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
+            currentPlayer.act();
+        }
+    }
+
+    checkGameEnded () {
+        let $playersInGame = [];
+        forEach(this.game.global.ALL_CELLS, function ($cell) {
+            $playersInGame[$cell.asset.player.id] = true;
+        });
+
+        let $count = 0;
+        for (let i = 0; i < $playersInGame.length; ++i) {
+            if ($playersInGame[i]) {
+                $count++;
+            }
+        }
+
+        return ($count < 2);
     }
 
     distribuiteAttack ($player) {
