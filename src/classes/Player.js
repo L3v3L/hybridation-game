@@ -83,8 +83,13 @@ export default class {
 
         if (targetHexagon !== null) {
             if (targetHexagon.isOwnedBy(this.id)) {
-                if (this.selectedHexagon == null && targetHexagon.isSelected() === false && targetHexagon.attack > 1) {
+                if (targetHexagon.isSelected() === false && targetHexagon.attack > 1) {
+                    //remove selection from last selected
+                    if (this.selectedHexagon !== null) {
+                        this.selectedHexagon.unselect();
+                    }
                     this.selectedHexagon = targetHexagon.select();
+
                 } else if (targetHexagon.isSelected() === true && targetHexagon === this.selectedHexagon) {
                     targetHexagon.unselect();
                     this.selectedHexagon = null;
