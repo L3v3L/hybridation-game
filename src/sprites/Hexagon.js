@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import color from 'color';
 import { forEach } from 'lodash';
 
 export default class extends Phaser.Group {
@@ -6,19 +7,20 @@ export default class extends Phaser.Group {
         super(game, x, y, asset);
         this.game = game;
 
-        this.hexagon = new Phaser.Sprite(this.game, x, y, asset);
-        this.hexagon.anchor.setTo(0.5);
-        this.hexagon.inputEnabled = true;
-        this.hexagon.events.onInputDown.add(this.mclick, this);
-        this.hexagon.tint = player.tint;
-        this.hexagon.width = width;
-        this.hexagon.height = height;
-
         this.cell = cell;
         this.player = player;
         this.state = state;
         this.attack = attack;
         this.selected = false;
+
+        this.hexagon = new Phaser.Sprite(this.game, x, y, asset);
+        this.hexagon.anchor.setTo(0.5);
+        this.hexagon.inputEnabled = true;
+        this.hexagon.events.onInputDown.add(this.mclick, this);
+        this.hexagon.tint = this.getTint();
+        this.hexagon.width = width;
+        this.hexagon.height = height;
+
         this.attackText = new Phaser.Text(this.game, x + 2, y + 2, attack, {
             font: '18px KenVector Future ',
             fill: 'black',
@@ -34,6 +36,15 @@ export default class extends Phaser.Group {
         this.add(this.attackText);
     }
 
+    getTint () {
+        let minPercentage = 0.5;
+        let range = 1 - minPercentage;
+        let $attackPercentage = ((this.attack * 100) / this.game.global.MAX_ATTACK) / 100;
+        let $inRangePercentage = ($attackPercentage * range);
+        let $tint = color(this.player.tint).lighten(1 - (minPercentage + $inRangePercentage)).rgbNumber();
+        return $tint;
+    }
+
     mclick () {
         let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
         currentPlayer.interact(this);
@@ -47,7 +58,7 @@ export default class extends Phaser.Group {
 
     unselect () {
         this.selected = false;
-        this.hexagon.tint = this.player.tint;
+        this.hexagon.tint = this.getTint();
     }
 
     isAdjacentTo (hexagon) {
@@ -75,6 +86,7 @@ export default class extends Phaser.Group {
 
     increaseAttack () {
         this.attack = this.attack + 1;
+        this.hexagon.tint = this.getTint();
         this.updateAttackText();
     }
 }
