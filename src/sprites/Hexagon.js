@@ -91,11 +91,11 @@ export default class extends Phaser.Group {
     }
 
     getConnectionsByPlayer ($onlyPlayer = null) {
-        let $possibleMoves = clone(this.cell.connections).filter(function (cell) {
+        let $possibleMoves = this.cell.connections.filter(function (cell) {
             if ($onlyPlayer) {
-                return (typeof cell === 'object' && cell.asset.player === this.$onlyPlayer);
+                return (typeof cell === 'object' && cell.asset.player.id === $onlyPlayer.id);
             } else {
-                return (typeof cell === 'object' && cell.asset.player !== this.player);
+                return (typeof cell === 'object' && cell.asset.player.id !== this.player.id);
             }
         }, this);
         return $possibleMoves;
