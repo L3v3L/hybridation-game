@@ -123,20 +123,28 @@ export default class extends Phaser.Group {
             //exclude attacking hexagon
             //exclude attacking cluster siblings
             //store an increment of chainPoints from found cells in victim cell
+            cell.friendsPoints = 0;
 
+            //get all friends connected to enemy
             let $friends = cell.asset.getConnectionsByPlayer(this.player);
+
             if ($friends.length > 0) {
-                $friends = $friends.filter(function (cell) {
-                    return (cell.id !== this.id &&
-                        cell.clusterBelongs.filter(function (value) {
-                            return cell.id === this.id;
+                //filter out unwanted friends
+                $friends = $friends.filter(function ($friendCell) {
+                    //is friend me, is friend in my cluster
+                    return ($friendCell.id !== this.cell.id &&
+                        $friendCell.clusterBelongs.filter(function (cell2) {
+                            return cell2.id === this.cell.id;
                         }, this).length === 0);
                 }, this);
 
-                cell.friendsPoints = $friends.reduce(function (accumulator, currentCell) {
-                    return accumulator + currentCell.clusterBelongs.length;
-                });
+                if ($friends.length > 0) {
+                    cell.friendsPoints = $friends.reduce(function (total, currentCell) {
+                        return total + currentCell.clusterBelongs.length;
+                    }, 0);
+                }
             }
+
             return cell;
         }, this);
 
