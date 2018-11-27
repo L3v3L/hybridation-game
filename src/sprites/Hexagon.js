@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import color from 'color';
-import { forEach } from 'lodash';
+import { forEach, clone } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, cell, player, state, attack}) {
@@ -88,5 +88,72 @@ export default class extends Phaser.Group {
         this.attack = this.attack + 1;
         this.hexagon.tint = this.getTint();
         this.updateAttackText();
+    }
+
+    getConnectionsByPlayer ($onlyPlayer = null) {
+        let $possibleMoves = this.cell.connections.filter(function (cell) {
+            if ($onlyPlayer) {
+                return (typeof cell === 'object' && cell.asset.player.id === $onlyPlayer.id);
+            } else {
+                return (typeof cell === 'object' && cell.asset.player.id !== this.player.id);
+            }
+        }, this);
+        return $possibleMoves;
+    }
+
+    scoreMoves () {
+        let $possibleMoves = this.getConnectionsByPlayer();
+
+        //score diff
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            cell.movePoints = this.attack - cell.asset.attack;
+            return cell;
+        }, this);
+
+        //score messing chains
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            //check how big chain cell is part of
+            cell.chainPoints = cell.clusterBelongs.length;
+            return cell;
+        }, this);
+
+        //score connecting to chains
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            //find all connecting cells that are the attackers same player
+            //exclude attacking hexagon
+            //exclude attacking cluster siblings
+            //store an increment of chainPoints from found cells in victim cell
+            cell.friendsPoints = 0;
+
+            //get all friends connected to enemy
+            let $friends = cell.asset.getConnectionsByPlayer(this.player);
+
+            if ($friends.length > 0) {
+                //filter out unwanted friends
+                $friends = $friends.filter(function ($friendCell) {
+                    //is friend me, is friend in my cluster
+                    return ($friendCell.id !== this.cell.id &&
+                        $friendCell.clusterBelongs.filter(function (cell2) {
+                            return cell2.id === this.cell.id;
+                        }, this).length === 0);
+                }, this);
+
+                if ($friends.length > 0) {
+                    cell.friendsPoints = $friends.reduce(function (total, currentCell) {
+                        return total + currentCell.clusterBelongs.length;
+                    }, 0);
+                }
+            }
+
+            return cell;
+        }, this);
+
+        //sum up points
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            cell.totalPoints = (cell.movePoints * this.game.global.MOVE_POINTS_WEIGHT) + (cell.friendsPoints * this.game.global.FRIEND_POINTS_WEIGHT) + (cell.chainPoints * this.game.global.CHAIN_POINTS_WEIGHT);
+            return cell;
+        }, this);
+
+        return $possibleMoves;
     }
 }

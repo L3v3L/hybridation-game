@@ -239,6 +239,7 @@ export default class extends Phaser.State {
                         $cell.asset.player.clusters[$key] = [];
                         $cluster = null;
                     } else {
+                        $cell.clusterBelongs = $cluster;
                         $cluster.push($cell);
                         $alreadyfoundIn = $key;
                     }
@@ -246,7 +247,9 @@ export default class extends Phaser.State {
             });
 
             if ($alreadyfoundIn === null) {
-                $cell.asset.player.clusters.push([$cell]);
+                let $newCluster = [$cell];
+                $cell.clusterBelongs = $newCluster;
+                $cell.asset.player.clusters.push($newCluster);
             }
         });
 

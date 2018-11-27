@@ -7,6 +7,7 @@ export default class {
         this.x = null;
         this.y = null;
         this.asset = null;
+        this.clusterBelongs = null;
     }
 
     /**
