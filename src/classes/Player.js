@@ -40,25 +40,23 @@ export default class {
 
         //find best play for each players cell
         forEach(this.game.global.ALL_CELLS, function (cell) {
-            if (cell.asset.player.id === $playerId) {
+            if (cell.asset.player.id === $playerId && cell.asset.attack > 1) {
+                let $possibleMoves = cell.asset.scoreMoves();
                 let $newMove = null;
-                let $smallestConnectionAttack = null;
-                forEach(cell.connections, function (connection) {
-                    //find biggest diff play
-                    if (typeof connection === 'object' &&
-                        connection.asset.player.id !== cell.asset.player.id &&
-                        cell.asset.attack > 1 &&
-                        connection.asset.attack <= cell.asset.attack &&
-                        ($smallestConnectionAttack === null || connection.asset.attack < $smallestConnectionAttack)
-                    ) {
-                        $smallestConnectionAttack = connection.asset.attack;
-                        $newMove = {
-                            selectedHexagon: cell.asset,
-                            targetHexagon: connection.asset,
-                            diff: (cell.asset.attack - connection.asset.attack)
-                        };
-                    }
-                });
+                if (typeof $possibleMoves === 'object' && $possibleMoves.length > 0) {
+                    let highestValue = Math.max.apply(Math, $possibleMoves.map(function (o) {
+                        return o.totalPoints;
+                    }));
+
+                    let targetCell = $possibleMoves.find(function (o) {
+                        return o.totalPoints === highestValue;
+                    }, highestValue);
+
+                    $newMove = {
+                        selectedHexagon: cell.asset,
+                        targetHexagon: targetCell.asset,
+                    };
+                }
                 if ($newMove !== null) {
                     possibleMoves.push($newMove);
                 }
