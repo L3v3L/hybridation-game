@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import color from 'color';
-import { forEach } from 'lodash';
+import { forEach, clone } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, cell, player, state, attack}) {
@@ -101,4 +101,45 @@ export default class extends Phaser.Group {
         return $possibleMoves;
     }
 
+    scoreMoves () {
+        let $possibleMoves = this.getConnectionsByPlayer();
+
+        //score diff
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            cell.movePoints = this.attack - cell.asset.attack;
+            return cell;
+        }, this);
+
+        //score messing chains
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            //check how big chain cell is part of
+            cell.chainPoints = cell.clusterBelongs.length;
+            return cell;
+        }, this);
+
+        //score connecting to chains
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            //find all connecting cells that are the attackers same player
+            //exclude attacking hexagon
+            //exclude attacking cluster siblings
+            //store an increment of chainPoints from found cells in victim cell
+
+            let $friends = cell.asset.getConnectionsByPlayer(this.player);
+            if ($friends.length > 0) {
+                $friends = $friends.filter(function (cell) {
+                    return (cell.id !== this.id &&
+                        cell.clusterBelongs.filter(function (value) {
+                            return cell.id === this.id;
+                        }, this).length === 0);
+                }, this);
+
+                cell.friendsPoints = $friends.reduce(function (accumulator, currentCell) {
+                    return accumulator + currentCell.clusterBelongs.length;
+                });
+            }
+            return cell;
+        }, this);
+
+        return $possibleMoves;
+    }
 }
