@@ -89,4 +89,16 @@ export default class extends Phaser.Group {
         this.hexagon.tint = this.getTint();
         this.updateAttackText();
     }
+
+    getConnectionsByPlayer ($onlyPlayer = null) {
+        let $possibleMoves = clone(this.cell.connections).filter(function (cell) {
+            if ($onlyPlayer) {
+                return (typeof cell === 'object' && cell.asset.player === this.$onlyPlayer);
+            } else {
+                return (typeof cell === 'object' && cell.asset.player !== this.player);
+            }
+        }, this);
+        return $possibleMoves;
+    }
+
 }
