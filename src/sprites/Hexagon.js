@@ -148,6 +148,12 @@ export default class extends Phaser.Group {
             return cell;
         }, this);
 
+        //sum up points
+        $possibleMoves = $possibleMoves.map(function (cell) {
+            cell.totalPoints = (cell.movePoints * this.game.global.MOVE_POINTS_WEIGHT) + (cell.friendsPoints * this.game.global.FRIEND_POINTS_WEIGHT) + (cell.chainPoints * this.game.global.CHAIN_POINTS_WEIGHT);
+            return cell;
+        }, this);
+
         return $possibleMoves;
     }
 }
