@@ -259,7 +259,7 @@ export default class extends Phaser.State {
     }
 
     nextTurn () {
-        if (this.checkGameEnded()) {
+        if (this.getPlayersInGame().length < 2) {
             console.log('game ended');
         } else {
             this.updateData();
@@ -271,20 +271,14 @@ export default class extends Phaser.State {
         }
     }
 
-    checkGameEnded () {
-        let $playersInGame = [];
-        forEach(this.game.global.ALL_CELLS, function ($cell) {
-            $playersInGame[$cell.asset.player.id] = true;
-        });
-
-        let $count = 0;
-        for (let i = 0; i < $playersInGame.length; ++i) {
-            if ($playersInGame[i]) {
-                $count++;
+    getPlayersInGame () {
+        return this.game.global.PLAYER_ARRAY.filter(function ($player) {
+            for (let i = 0; i < this.game.global.ALL_CELLS.length; i++) {
+                if (this.game.global.ALL_CELLS[i].asset.player.id === $player.id) {
+                    return true;
+                }
             }
-        }
-
-        return ($count < 2);
+        }, this);
     }
 
     distribuiteAttack ($player) {
