@@ -278,7 +278,6 @@ export default class extends Phaser.State {
                         $isPlayerInGame = true;
                     }
                 }
-                console.log(currentPlayer.id);
             } while (!$isPlayerInGame);
 
             currentPlayer.act();
