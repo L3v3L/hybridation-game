@@ -21,8 +21,8 @@ export default class extends Phaser.State {
             outFrame: 'button0',
             downFrame: 'button0',
             upFrame: 'button0',
-            tint: Phaser.Color.GREEN,
-            label: 'Restart',
+            tint: Phaser.Color.VIOLET,
+            label: 'Cure Virus',
             style: {
                 font: '19px KenVector Future Thin',
                 fill: 'white',
@@ -34,19 +34,25 @@ export default class extends Phaser.State {
         $restartBtn.anchor.setTo(0.5);
         this.game.add.existing($restartBtn);
 
-        let $gameOverTxtTitle = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 100, 'Gameover', {
-            font: '19px KenVector Future',
+        let $titleTxt = new Phaser.Text(this.game, this.game.world.centerX, 100, 'Hybridation', {
+            font: '30px KenVector Future',
             fill: '#000000'
         });
-        $gameOverTxtTitle.anchor.setTo(0.5);
-        this.game.add.existing($gameOverTxtTitle);
+        $titleTxt.anchor.setTo(0.5);
+        this.game.add.existing($titleTxt);
 
-        let $winnerTxt = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 50, 'Winner ' + this.game.global.PLAYERS_IN_GAME[0].name, {
-            font: '19px KenVector Future',
-            fill: '#000000'
+        let $description = `
+        Humanity is being infected by the Hybridation virus\n stop the virus, save the world.
+        `;
+
+        let $DescriptionTxt = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 100, $description, {
+            font: '19px KenVector Future', fill: '#000000', align: 'center',
+            boundsAlignH: "center",
+            boundsAlignV: "middle"
         });
-        $winnerTxt.anchor.setTo(0.5);
-        this.game.add.existing($winnerTxt);
+        $DescriptionTxt.anchor.setTo(0.5);
+        this.game.add.existing($DescriptionTxt);
+
     }
 
     render () {
