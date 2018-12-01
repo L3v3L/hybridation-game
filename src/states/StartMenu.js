@@ -9,7 +9,6 @@ export default class extends Phaser.State {
     }
 
     create () {
-
         let $restartBtn = new TextButton({
             game: this.game,
             x: this.game.world.centerX,
@@ -46,13 +45,21 @@ export default class extends Phaser.State {
         `;
 
         let $DescriptionTxt = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 100, $description, {
-            font: '19px KenVector Future', fill: '#000000', align: 'center',
-            boundsAlignH: "center",
-            boundsAlignV: "middle"
+            font: '19px KenVector Future',
+            fill: '#000000',
+            align: 'center',
+            boundsAlignH: 'center',
+            boundsAlignV: 'middle'
         });
         $DescriptionTxt.anchor.setTo(0.5);
         this.game.add.existing($DescriptionTxt);
 
+        this.logoTop = new Phaser.Sprite(this.game, 0, 0, 'logo');
+        this.logoTop.anchor.setTo(0.5);
+        this.logoBottom = new Phaser.Sprite(this.game, this.game.world.width, this.game.world.height, 'logo');
+        this.logoBottom.anchor.setTo(0.5);
+        this.game.add.existing(this.logoTop);
+        this.game.add.existing(this.logoBottom);
     }
 
     render () {

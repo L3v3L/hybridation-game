@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import TextButton from '../extensions/TextButton';
 import PlayerBadge from '../classes/PlayerBadge';
-import { forEach } from 'lodash';
 
 export default class Hud extends Phaser.Group {
     constructor ({game, player}) {
@@ -27,15 +26,6 @@ export default class Hud extends Phaser.Group {
                 y: 20
             }));
         }
-        //
-        //for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS;  i++) {
-        //    this.playerBadges.push(new PlayerBadge({
-        //        game: this.game,
-        //        player: this.game.global.PLAYER_ARRAY[i],
-        //        x: (i * 140) + 60,
-        //        y: 20
-        //    }));
-        //}
 
         this.endTurnButton = new TextButton({
             game: this.game,
