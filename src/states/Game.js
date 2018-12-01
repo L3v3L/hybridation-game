@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Hexagon from '../sprites/Hexagon';
 import Cell from '../classes/Cell';
 import globals from '../globals';
-import { clone, forEach, random, shuffle, floor } from 'lodash';
+import { cloneDeep, forEach, random, shuffle, floor } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud';
 
@@ -108,14 +108,14 @@ export default class extends Phaser.State {
         });
     }
 
-    initGlobals () {
-        this.game.global = clone(globals);
-    }
-
     render () {
         if (__DEV__) {
             //this.game.debug.spriteInfo(this.hexagon, 32, 32);
         }
+    }
+
+    initGlobals () {
+        this.game.global = cloneDeep(globals);
     }
 
     createPlayerAssignmentArray () {
@@ -262,7 +262,7 @@ export default class extends Phaser.State {
         let $playersInGame = this.getPlayersInGame();
 
         if ($playersInGame.length < 2) {
-            console.log('game ended');
+            this.state.restart('GameOver');
         } else {
             this.updateData();
             this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
