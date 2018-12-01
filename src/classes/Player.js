@@ -37,6 +37,7 @@ export default class {
     generateMove () {
         let possibleMoves = [];
         let $playerId = this.id;
+        let $aiRisk = this.game.global.AI_RISK * this.game.global.MOVE_POINTS_WEIGHT;
 
         //find best play for each players cell
         forEach(this.game.global.ALL_CELLS, function (cell) {
@@ -44,24 +45,47 @@ export default class {
                 let $possibleMoves = cell.asset.scoreMoves();
                 let $newMove = null;
                 if (typeof $possibleMoves === 'object' && $possibleMoves.length > 0) {
+                    //find highest totalPoints
                     let highestValue = Math.max.apply(Math, $possibleMoves.map(function (o) {
                         return o.totalPoints;
                     }));
 
-                    let targetCell = $possibleMoves.find(function (o) {
-                        return o.totalPoints === highestValue;
-                    }, highestValue);
+                    //asses risk
 
-                    $newMove = {
-                        selectedHexagon: cell.asset,
-                        targetHexagon: targetCell.asset,
-                    };
+                    let $assestment = random(0, 100);
+                    let riskDifftotal = highestValue - $aiRisk;
+                    let $thresolholdArea = (1 / (2 + Math.abs(riskDifftotal))) * 100;
+
+                    let $skip = false;
+                    if (riskDifftotal >= 0) {
+                        if ($assestment <= $thresolholdArea) {
+                            $skip = true;
+                        }
+                    } else {
+                        if ($assestment > $thresolholdArea) {
+                            $skip = true;
+                        }
+                    }
+
+                    if (!$skip) {
+                        //find cell withat highest value
+                        let targetCell = $possibleMoves.find(function (o) {
+                            return o.totalPoints === highestValue;
+                        }, highestValue);
+
+                        //create attack
+                        $newMove = {
+                            selectedHexagon: cell.asset,
+                            targetHexagon: targetCell.asset,
+                        };
+                    }
+
                 }
                 if ($newMove !== null) {
                     possibleMoves.push($newMove);
                 }
             }
-        });
+        }, this);
 
         //find best play
         let $bestMove = null;
