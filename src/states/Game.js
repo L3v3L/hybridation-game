@@ -27,8 +27,8 @@ export default class extends Phaser.State {
 
         //load globals
         this.initGlobals();
-        let $cellWidth = 50;
-        let $cellHeight = 50;
+        let $cellWidth = 40;
+        let $cellHeight = 40;
 
         //generate players
         for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
@@ -262,6 +262,7 @@ export default class extends Phaser.State {
         let $playersInGame = this.getPlayersInGame();
 
         if ($playersInGame.length < 2) {
+            this.game.global.PLAYERS_IN_GAME = $playersInGame;
             this.state.start('GameOver');
         } else {
             this.updateData();

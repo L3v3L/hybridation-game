@@ -9,6 +9,7 @@ export default class extends Phaser.State {
     }
 
     create () {
+
         let $restartBtn = new TextButton({
             game: this.game,
             x: this.game.world.centerX,
@@ -32,6 +33,14 @@ export default class extends Phaser.State {
         });
         $restartBtn.anchor.setTo(0.5);
         this.game.add.existing($restartBtn);
+
+        let $gameOverTxtTitle = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY-100, 'Gameover', {font: '19px KenVector Future', fill: '#000000'});
+        $gameOverTxtTitle.anchor.setTo(0.5);
+        this.game.add.existing($gameOverTxtTitle);
+
+        let $winnerTxt = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY-50, 'Winner '+this.game.global.PLAYERS_IN_GAME[0].name, {font: '19px KenVector Future', fill: '#000000'});
+        $winnerTxt.anchor.setTo(0.5);
+        this.game.add.existing($winnerTxt);
     }
 
     render () {
