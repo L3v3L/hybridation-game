@@ -262,7 +262,7 @@ export default class extends Phaser.State {
         let $playersInGame = this.getPlayersInGame();
 
         if ($playersInGame.length < 2) {
-            this.state.restart('GameOver');
+            this.state.start('GameOver');
         } else {
             this.updateData();
             this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
