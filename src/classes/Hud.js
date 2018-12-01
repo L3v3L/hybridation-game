@@ -22,15 +22,15 @@ export default class Hud extends Phaser.Group {
             this.playerBadges.push(new PlayerBadge({
                 game: this.game,
                 player: value,
-                x: (index * 140) + 60,
-                y: 20
+                x: (index * 110) + 115,
+                y: 15
             }));
         }
 
         this.endTurnButton = new TextButton({
             game: this.game,
-            x: 120,
-            y: 65,
+            x: 230,
+            y: 60,
             asset: 'greySheet',
             callback: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER].endTurn,
             callbackContext: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER],
