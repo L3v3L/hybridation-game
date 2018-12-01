@@ -1,6 +1,6 @@
 export default {
-    gameWidth: 760,
-    gameHeight: 400,
+    gameWidth: 1352,
+    gameHeight: 654,
     localStorageName: 'hybridation-game',
     webfonts: ['Bangers']
 };
