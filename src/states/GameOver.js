@@ -9,6 +9,15 @@ export default class extends Phaser.State {
     }
 
     create () {
+        let $btnText = 'try again';
+        let $titleText = 'Patient has turned';
+        let $text = 'The virus has taken over the patient';
+
+        if (!this.game.global.PLAYERS_IN_GAME[0].isAI) {
+            $btnText = 'next patient';
+            $titleText = 'Patient Cured';
+            $text = 'You have successfully cured this patient';
+        }
 
         let $restartBtn = new TextButton({
             game: this.game,
@@ -22,7 +31,7 @@ export default class extends Phaser.State {
             downFrame: 'button0',
             upFrame: 'button0',
             tint: Phaser.Color.GREEN,
-            label: 'Restart',
+            label: $btnText,
             style: {
                 font: '19px KenVector Future Thin',
                 fill: 'white',
@@ -34,19 +43,20 @@ export default class extends Phaser.State {
         $restartBtn.anchor.setTo(0.5);
         this.game.add.existing($restartBtn);
 
-        let $gameOverTxtTitle = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 100, 'Gameover', {
+
+        let $gameOverTxtTitle = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 100, $titleText, {
             font: '19px KenVector Future',
             fill: '#000000'
         });
         $gameOverTxtTitle.anchor.setTo(0.5);
         this.game.add.existing($gameOverTxtTitle);
 
-        let $winnerTxt = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 50, 'Winner ' + this.game.global.PLAYERS_IN_GAME[0].name, {
+        let $gameOverTxt = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 50, $text, {
             font: '19px KenVector Future',
             fill: '#000000'
         });
-        $winnerTxt.anchor.setTo(0.5);
-        this.game.add.existing($winnerTxt);
+        $gameOverTxt.anchor.setTo(0.5);
+        this.game.add.existing($gameOverTxt);
     }
 
     render () {
