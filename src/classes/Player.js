@@ -23,10 +23,10 @@ export default class {
     }
 
     playMove () {
-        let $move = this.generateMove();
-        if ($move !== null) {
-            this.selectedHexagon = $move.selectedHexagon;
-            this.capture($move.targetHexagon);
+        let move = this.generateMove();
+        if (move !== null) {
+            this.selectedHexagon = move.selectedHexagon;
+            this.capture(move.targetHexagon);
             this.clearSelection();
         } else {
             this.timer.stop(true);
@@ -36,42 +36,42 @@ export default class {
 
     generateMove () {
         let possibleMoves = [];
-        let $playerId = this.id;
+        let playerId = this.id;
 
         //find best play for each players cell
         forEach(this.game.global.ALL_CELLS, function (cell) {
-            if (cell.asset.player.id === $playerId && cell.asset.attack > 1) {
-                let $possibleMoves = cell.asset.scoreMoves();
-                let $newMove = null;
-                if (typeof $possibleMoves === 'object' && $possibleMoves.length > 0) {
-                    let highestValue = Math.max.apply(Math, $possibleMoves.map(function (o) {
+            if (cell.asset.player.id === playerId && cell.asset.attack > 1) {
+                let possibleMovesTemp = cell.asset.scoreMoves();
+                let newMove = null;
+                if (typeof possibleMovesTemp === 'object' && possibleMovesTemp.length > 0) {
+                    let highestValue = Math.max.apply(Math, possibleMovesTemp.map(function (o) {
                         return o.totalPoints;
                     }));
 
-                    let targetCell = $possibleMoves.find(function (o) {
+                    let targetCell = possibleMovesTemp.find(function (o) {
                         return o.totalPoints === highestValue;
                     }, highestValue);
 
-                    $newMove = {
+                    newMove = {
                         selectedHexagon: cell.asset,
-                        targetHexagon: targetCell.asset,
+                        targetHexagon: targetCell.asset
                     };
                 }
-                if ($newMove !== null) {
-                    possibleMoves.push($newMove);
+                if (newMove !== null) {
+                    possibleMoves.push(newMove);
                 }
             }
         });
 
         //find best play
-        let $bestMove = null;
-        forEach(possibleMoves, function ($play) {
-            if ($bestMove === null || $play.diff > $bestMove.diff) {
-                $bestMove = $play;
+        let bestMove = null;
+        forEach(possibleMoves, function (play) {
+            if (bestMove === null || play.diff > bestMove.diff) {
+                bestMove = play;
             }
         });
 
-        return $bestMove;
+        return bestMove;
     }
 
     interact (targetHexagon) {
@@ -87,7 +87,6 @@ export default class {
                         this.selectedHexagon.unselect();
                     }
                     this.selectedHexagon = targetHexagon.select();
-
                 } else if (targetHexagon.isSelected() === true && targetHexagon === this.selectedHexagon) {
                     targetHexagon.unselect();
                     this.selectedHexagon = null;
@@ -148,14 +147,14 @@ export default class {
     }
 
     roll (hexagon) {
-        let $roll = 0;
-        let $n = 0;
+        let roll = 0;
+        let n = 0;
 
-        while ($n < hexagon.attack) {
-            $roll += random(1, 6);
-            $n++;
+        while (n < hexagon.attack) {
+            roll += random(1, 6);
+            n++;
         }
-        return $roll;
+        return roll;
     }
 
     clearSelection () {
@@ -197,35 +196,35 @@ export default class {
         this.gamestate.nextTurn();
     }
 
-    isCellConnectedToAnyInCellArray ($needleCell, $CellArray) {
-        let $return = false;
-        forEach($CellArray, function ($cell) {
-            if ($cell.asset.isAdjacentTo($needleCell.asset)) {
-                $return = $cell;
+    isCellConnectedToAnyInCellArray (needleCell, CellArray) {
+        let connection = false;
+        forEach(CellArray, function (cell) {
+            if (cell.asset.isAdjacentTo(needleCell.asset)) {
+                connection = cell;
                 return false;
             }
         });
-        return $return;
+        return connection;
     }
 
     getHighestClusterLength () {
-        let $length = 0;
-        forEach(this.clusters, function ($cluster) {
-            let $clusterLength = $cluster.length;
-            if ($clusterLength > $length) {
-                $length = $clusterLength;
+        let length = 0;
+        forEach(this.clusters, function (cluster) {
+            let clusterLength = cluster.length;
+            if (clusterLength > length) {
+                length = clusterLength;
             }
         });
-        return $length;
+        return length;
     }
 
     getAllCellsInAllClusters () {
-        let $cells = [];
-        forEach(this.clusters, function ($cluster) {
-            forEach($cluster, function ($cell) {
-                $cells.push($cell);
+        let cells = [];
+        forEach(this.clusters, function (cluster) {
+            forEach(cluster, function (cell) {
+                cells.push(cell);
             });
         });
-        return $cells;
+        return cells;
     }
 }
