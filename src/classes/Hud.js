@@ -85,8 +85,12 @@ export default class Hud extends Phaser.Group {
         this.updatePlayers();
         if (this.currentPlayer.isAI) {
             this.removeChild(this.endTurnButton);
+            this.spaceKey.enabled = false;
+            this.returnKey.enabled = false;
         } else {
             this.addChild(this.endTurnButton);
+            this.spaceKey.enabled = true;
+            this.returnKey.enabled = true;
         }
     }
 };
