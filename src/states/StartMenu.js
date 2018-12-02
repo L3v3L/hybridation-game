@@ -60,6 +60,11 @@ export default class extends Phaser.State {
         this.logoBottom.anchor.setTo(0.5);
         this.game.add.existing(this.logoTop);
         this.game.add.existing(this.logoBottom);
+
+        this.returnKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.returnKey.onDown.add(this.restartGame, this);
+        this.spaceKey.onDown.add(this.restartGame, this);
     }
 
     render () {

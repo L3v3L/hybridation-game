@@ -43,6 +43,10 @@ export default class extends Phaser.State {
         $restartBtn.anchor.setTo(0.5);
         this.game.add.existing($restartBtn);
 
+        this.returnKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.returnKey.onDown.add(this.restartGame, this);
+        this.spaceKey.onDown.add(this.restartGame, this);
 
         let $gameOverTxtTitle = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 100, $titleText, {
             font: '19px KenVector Future',

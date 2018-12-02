@@ -54,6 +54,11 @@ export default class Hud extends Phaser.Group {
         }
 
         this.add(this.message);
+
+        this.returnKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.returnKey.onDown.add(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER].endTurn, this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
+        this.spaceKey.onDown.add(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER].endTurn, this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
     }
 
     updateMessage (message) {
