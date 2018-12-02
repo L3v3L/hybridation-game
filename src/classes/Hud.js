@@ -49,8 +49,8 @@ export default class Hud extends Phaser.Group {
             textY: 0
         });
 
-        for (let $playerBadge of this.playerBadges) {
-            this.add($playerBadge);
+        for (let playerBadge of this.playerBadges) {
+            this.add(playerBadge);
         }
 
         this.add(this.message);

@@ -12,11 +12,11 @@ export default class {
 
     /**
      * set this cells corrdinates
-     * @param $positionArray
+     * @param positionArray
      */
-    setPosition ($positionArray) {
-        this.x = $positionArray[0];
-        this.y = $positionArray[1];
+    setPosition (positionArray) {
+        this.x = positionArray[0];
+        this.y = positionArray[1];
     }
 
     /**
@@ -34,12 +34,12 @@ export default class {
 
     /**
      * get an array of the coordinates connected in a certain direction
-     * @param $direction
+     * @param direction
      * @returns {*[]}
      */
-    getNextPosition ($direction) {
-        $direction = this.limPos($direction);
-        switch ($direction) {
+    getNextPosition (direction) {
+        direction = this.limPos(direction);
+        switch (direction) {
             case 0:
                 return [this.x, this.y - 2];
             case 1:
@@ -69,83 +69,83 @@ export default class {
 
     /**
      * connect a cell to this cell
-     * @param $cell
-     * @param $direction
+     * @param cell
+     * @param direction
      */
-    connectNode ($cell, $direction) {
-        $direction = this.limPos($direction);
+    connectNode (cell, direction) {
+        direction = this.limPos(direction);
 
-        if (typeof $cell === 'undefined') {
+        if (typeof cell === 'undefined') {
             return;
         }
 
-        let $oppositeDirection = this.opposite($direction);
+        let oppositeDirection = this.opposite(direction);
 
-        if (typeof this.connections[$direction] === 'undefined') {
-            this.connections[$direction] = $cell;
+        if (typeof this.connections[direction] === 'undefined') {
+            this.connections[direction] = cell;
         }
 
-        if (typeof $cell.connections[$oppositeDirection] === 'undefined') {
-            $cell.connections[$oppositeDirection] = this;
+        if (typeof cell.connections[oppositeDirection] === 'undefined') {
+            cell.connections[oppositeDirection] = this;
         }
 
-        this.leftRightConnect($direction, $cell);
+        this.leftRightConnect(direction, cell);
     }
 
     /**
      * connect cells left and right to the parent connecting cell
-     * @param $direction
-     * @param $cell
+     * @param direction
+     * @param cell
      */
-    leftRightConnect ($direction, $cell) {
-        let $oppositeDirection = this.opposite($direction);
+    leftRightConnect (direction, cell) {
+        let oppositeDirection = this.opposite(direction);
         //connect existing adjacent cells to new cell
-        let $leftCell = this.connections[this.limPos($direction - 1)];
-        let $rightCell = this.connections[this.limPos($direction + 1)];
+        let leftCell = this.connections[this.limPos(direction - 1)];
+        let rightCell = this.connections[this.limPos(direction + 1)];
 
-        if (typeof $leftCell !== 'undefined' && typeof $cell.connections[$cell.limPos($oppositeDirection + 1)] === 'undefined') {
-            $cell.connectNode($leftCell, $cell.limPos($oppositeDirection + 1));
+        if (typeof leftCell !== 'undefined' && typeof cell.connections[cell.limPos(oppositeDirection + 1)] === 'undefined') {
+            cell.connectNode(leftCell, cell.limPos(oppositeDirection + 1));
         }
 
-        if (typeof $rightCell !== 'undefined' && typeof $cell.connections[$cell.limPos($oppositeDirection - 1)] === 'undefined') {
-            $cell.connectNode($rightCell, $cell.limPos($oppositeDirection - 1));
+        if (typeof rightCell !== 'undefined' && typeof cell.connections[cell.limPos(oppositeDirection - 1)] === 'undefined') {
+            cell.connectNode(rightCell, cell.limPos(oppositeDirection - 1));
         }
     }
 
     /**
      * find the opposite connection position
-     * @param $pos
+     * @param pos
      * @returns {*}
      */
-    opposite ($pos) {
-        return this.limPos($pos + (this.connectionCount / 2));
+    opposite (pos) {
+        return this.limPos(pos + (this.connectionCount / 2));
     }
 
     /**
-     * Modulate $position into limit of connections
-     * @param $pos
+     * Modulate position into limit of connections
+     * @param pos
      * @returns {number}
      */
-    limPos ($pos) {
-        return (($pos % this.connectionCount) + this.connectionCount) % this.connectionCount;
+    limPos (pos) {
+        return ((pos % this.connectionCount) + this.connectionCount) % this.connectionCount;
     }
 
     /**
      * find first open connection
      */
-    findFirst ($empty, $clockwise) {
-        let $typeToFind = $empty ? 'undefined' : 'object';
+    findFirst (empty, clockwise) {
+        let typeToFind = empty ? 'undefined' : 'object';
 
         //todo find way to refract this
-        if ($clockwise) {
+        if (clockwise) {
             for (let i = 0; i < this.connectionCount; i++) {
-                if (typeof this.connections[i] === $typeToFind) {
+                if (typeof this.connections[i] === typeToFind) {
                     return this.limPos(i);
                 }
             }
         } else {
             for (let i = this.connectionCount; i >= 0; i--) {
-                if (typeof this.connections[i] === $typeToFind) {
+                if (typeof this.connections[i] === typeToFind) {
                     return this.limPos(i);
                 }
             }
