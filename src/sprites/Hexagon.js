@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import color from 'color';
-import { forEach, clone } from 'lodash';
+import { forEach } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, cell, player, state, attack}) {
@@ -39,10 +39,10 @@ export default class extends Phaser.Group {
     getTint () {
         let minPercentage = 0.5;
         let range = 1 - minPercentage;
-        let $attackPercentage = ((this.attack * 100) / this.game.global.MAX_ATTACK) / 100;
-        let $inRangePercentage = ($attackPercentage * range);
-        let $tint = color(this.player.tint).lighten(1 - (minPercentage + $inRangePercentage)).rgbNumber();
-        return $tint;
+        let attackPercentage = ((this.attack * 100) / this.game.global.MAX_ATTACK) / 100;
+        let inRangePercentage = (attackPercentage * range);
+        let tint = color(this.player.tint).lighten(1 - (minPercentage + inRangePercentage)).rgbNumber();
+        return tint;
     }
 
     mclick () {
@@ -90,35 +90,35 @@ export default class extends Phaser.Group {
         this.updateAttackText();
     }
 
-    getConnectionsByPlayer ($onlyPlayer = null) {
-        let $possibleMoves = this.cell.connections.filter(function (cell) {
-            if ($onlyPlayer) {
-                return (typeof cell === 'object' && cell.asset.player.id === $onlyPlayer.id);
+    getConnectionsByPlayer (onlyPlayer = null) {
+        let possibleMoves = this.cell.connections.filter(function (cell) {
+            if (onlyPlayer) {
+                return (typeof cell === 'object' && cell.asset.player.id === onlyPlayer.id);
             } else {
                 return (typeof cell === 'object' && cell.asset.player.id !== this.player.id);
             }
         }, this);
-        return $possibleMoves;
+        return possibleMoves;
     }
 
     scoreMoves () {
-        let $possibleMoves = this.getConnectionsByPlayer();
+        let possibleMoves = this.getConnectionsByPlayer();
 
         //score diff
-        $possibleMoves = $possibleMoves.map(function (cell) {
+        possibleMoves = possibleMoves.map(function (cell) {
             cell.movePoints = this.attack - cell.asset.attack;
             return cell;
         }, this);
 
         //score messing chains
-        $possibleMoves = $possibleMoves.map(function (cell) {
+        possibleMoves = possibleMoves.map(function (cell) {
             //check how big chain cell is part of
             cell.chainPoints = cell.clusterBelongs.length;
             return cell;
         }, this);
 
         //score connecting to chains
-        $possibleMoves = $possibleMoves.map(function (cell) {
+        possibleMoves = possibleMoves.map(function (cell) {
             //find all connecting cells that are the attackers same player
             //exclude attacking hexagon
             //exclude attacking cluster siblings
@@ -126,20 +126,20 @@ export default class extends Phaser.Group {
             cell.friendsPoints = 0;
 
             //get all friends connected to enemy
-            let $friends = cell.asset.getConnectionsByPlayer(this.player);
+            let friends = cell.asset.getConnectionsByPlayer(this.player);
 
-            if ($friends.length > 0) {
+            if (friends.length > 0) {
                 //filter out unwanted friends
-                $friends = $friends.filter(function ($friendCell) {
+                friends = friends.filter(function (friendCell) {
                     //is friend me, is friend in my cluster
-                    return ($friendCell.id !== this.cell.id &&
-                        $friendCell.clusterBelongs.filter(function (cell2) {
+                    return (friendCell.id !== this.cell.id &&
+                        friendCell.clusterBelongs.filter(function (cell2) {
                             return cell2.id === this.cell.id;
                         }, this).length === 0);
                 }, this);
 
-                if ($friends.length > 0) {
-                    cell.friendsPoints = $friends.reduce(function (total, currentCell) {
+                if (friends.length > 0) {
+                    cell.friendsPoints = friends.reduce(function (total, currentCell) {
                         return total + currentCell.clusterBelongs.length;
                     }, 0);
                 }
@@ -149,11 +149,11 @@ export default class extends Phaser.Group {
         }, this);
 
         //sum up points
-        $possibleMoves = $possibleMoves.map(function (cell) {
+        possibleMoves = possibleMoves.map(function (cell) {
             cell.totalPoints = (cell.movePoints * this.game.global.MOVE_POINTS_WEIGHT) + (cell.friendsPoints * this.game.global.FRIEND_POINTS_WEIGHT) + (cell.chainPoints * this.game.global.CHAIN_POINTS_WEIGHT);
             return cell;
         }, this);
 
-        return $possibleMoves;
+        return possibleMoves;
     }
 }
