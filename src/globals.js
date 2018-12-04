@@ -11,5 +11,6 @@ export default {
     MOVE_POINTS_WEIGHT: 1,
     FRIEND_POINTS_WEIGHT: 3,
     CHAIN_POINTS_WEIGHT: 2,
-    PLAYERS_IN_GAME: []
+    PLAYERS_IN_GAME: [],
+    TURN_COUNTER: 0
 };

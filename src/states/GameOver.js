@@ -12,6 +12,7 @@ export default class extends Phaser.State {
         let btnText = 'try again';
         let titleText = 'Patient has turned';
         let text = 'The virus has taken over the patient';
+        let statText = `Turns: ${this.game.global.TURN_COUNTER}`;
 
         if (!this.game.global.PLAYERS_IN_GAME[0].isAI) {
             btnText = 'next patient';
@@ -47,6 +48,13 @@ export default class extends Phaser.State {
         this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.returnKey.onDown.add(this.restartGame, this);
         this.spaceKey.onDown.add(this.restartGame, this);
+
+        let gameOverStatText = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 150, statText, {
+            font: '19px KenVector Future',
+            fill: '#000000'
+        });
+        gameOverStatText.anchor.setTo(0.5);
+        this.game.add.existing(gameOverStatText);
 
         let gameOverTxtTitle = new Phaser.Text(this.game, this.game.world.centerX, this.game.world.centerY - 100, titleText, {
             font: '19px KenVector Future',

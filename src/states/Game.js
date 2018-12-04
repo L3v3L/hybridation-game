@@ -265,6 +265,7 @@ export default class extends Phaser.State {
             this.game.global.PLAYERS_IN_GAME = playersInGame;
             this.state.start('GameOver');
         } else {
+            this.game.global.TURN_COUNTER++;
             this.updateData();
             this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
 
