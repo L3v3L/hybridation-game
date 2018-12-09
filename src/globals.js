@@ -15,7 +15,6 @@ let exports = {
     TURN_COUNTER: 0
 };
 
-console.log(process.env);
 //overides in debug mod
 if (process.env.DEBUG === true) {
     exports.AI_MOVE_DELAY_MS = process.env.DEBUG_AI_MOVE_DELAY_MS;
