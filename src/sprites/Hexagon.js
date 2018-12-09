@@ -21,7 +21,13 @@ export default class extends Phaser.Group {
         this.hexagon.width = width;
         this.hexagon.height = height;
 
-        this.attackText = new Phaser.Text(this.game, x + 2, y + 2, attack, {
+        if (this.game.global.SHOW_CELL_IDS) {
+            this.labelText = this.cell.id;
+        } else {
+            this.labelText = attack;
+        }
+
+        this.attackText = new Phaser.Text(this.game, x + 2, y + 2, this.labelText, {
             font: '18px KenVector Future ',
             fill: 'black',
             stroke: false,

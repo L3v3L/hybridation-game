@@ -13,7 +13,8 @@ let exports = {
     CHAIN_POINTS_WEIGHT: 2,
     PLAYERS_IN_GAME: [],
     TURN_COUNTER: 0,
-    NO_USER_TURN: false
+    NO_USER_TURN: false,
+    SHOW_CELL_IDS: false
 };
 
 
@@ -21,6 +22,7 @@ let exports = {
 if (process.env.DEBUG === 'true') {
     exports.AI_MOVE_DELAY_MS = process.env.DEBUG_AI_MOVE_DELAY_MS;
     exports.NO_USER_TURN = (process.env.DEBUG_NO_USER_TURN === 'true');
+    exports.SHOW_CELL_IDS = (process.env.DEBUG_SHOW_CELL_IDS === 'true');
 }
 
 export default exports;
