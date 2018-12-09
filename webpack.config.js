@@ -32,7 +32,9 @@ module.exports = {
     watch: true,
     plugins: [
         definePlugin,
-        new Dotenv(),
+        new Dotenv({
+            safe: true
+        }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor'/*chunkName= */,
             filename: 'vendor.bundle.js'/*filename= */
@@ -59,7 +61,8 @@ module.exports = {
             port: process.env.PORT || 30303,
             server: {
                 baseDir: ['./', './build']
-            }
+            },
+            open: false
         })
     ],
     module: {
