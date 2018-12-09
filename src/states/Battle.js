@@ -116,6 +116,10 @@ export default class extends Phaser.State {
 
     initGlobals () {
         this.game.global = cloneDeep(globals);
+
+        if (process.env.DEBUG === true) {
+            this.game.global.AI_MOVE_DELAY_MS = process.env.DEBUG_AI_MOVE_DELAY_MS;
+        }
     }
 
     createPlayerAssignmentArray () {
