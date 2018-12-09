@@ -12,12 +12,15 @@ let exports = {
     FRIEND_POINTS_WEIGHT: 3,
     CHAIN_POINTS_WEIGHT: 2,
     PLAYERS_IN_GAME: [],
-    TURN_COUNTER: 0
+    TURN_COUNTER: 0,
+    NO_USER_TURN: false
 };
 
+
 //overides in debug mod
-if (process.env.DEBUG === true) {
+if (process.env.DEBUG === 'true') {
     exports.AI_MOVE_DELAY_MS = process.env.DEBUG_AI_MOVE_DELAY_MS;
+    exports.NO_USER_TURN = (process.env.DEBUG_NO_USER_TURN === 'true');
 }
 
 export default exports;

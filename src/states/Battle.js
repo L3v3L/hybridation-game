@@ -257,6 +257,10 @@ export default class extends Phaser.State {
     }
 
     nextTurn () {
+        if (this.game.global.NO_USER_TURN) {
+            this.game.global.PLAYER_ARRAY[0].isAI = true;
+        }
+
         let playersInGame = this.getPlayersInGame();
 
         if (playersInGame.length < 2) {
