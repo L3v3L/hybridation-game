@@ -109,17 +109,11 @@ export default class extends Phaser.State {
     }
 
     render () {
-        if (__DEV__) {
-            //this.game.debug.spriteInfo(this.hexagon, 32, 32);
-        }
     }
 
     initGlobals () {
         this.game.global = cloneDeep(globals);
-
-        if (process.env.DEBUG === true) {
-            this.game.global.AI_MOVE_DELAY_MS = process.env.DEBUG_AI_MOVE_DELAY_MS;
-        }
+        console.log(process.env);
     }
 
     createPlayerAssignmentArray () {

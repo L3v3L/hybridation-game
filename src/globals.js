@@ -1,4 +1,4 @@
-export default {
+let exports = {
     ALL_CELLS: null,
     SELECTED_CELL: null,
     CURRENT_PLAYER: 0,
@@ -14,3 +14,11 @@ export default {
     PLAYERS_IN_GAME: [],
     TURN_COUNTER: 0
 };
+
+console.log(process.env);
+//overides in debug mod
+if (process.env.DEBUG === true) {
+    exports.AI_MOVE_DELAY_MS = process.env.DEBUG_AI_MOVE_DELAY_MS;
+}
+
+export default exports;
