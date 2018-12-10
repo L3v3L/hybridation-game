@@ -113,7 +113,6 @@ export default class extends Phaser.State {
 
     initGlobals () {
         this.game.global = cloneDeep(globals);
-        console.log(process.env);
     }
 
     createPlayerAssignmentArray () {

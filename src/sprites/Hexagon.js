@@ -79,7 +79,11 @@ export default class extends Phaser.Group {
     }
 
     updateAttackText () {
-        this.attackText.text = this.attack;
+        if (this.game.global.SHOW_CELL_IDS) {
+            this.attackText.text = this.cell.id;
+        } else {
+            this.attackText.text = this.attack;
+        }
     }
 
     isSelected () {
