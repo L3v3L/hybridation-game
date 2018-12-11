@@ -19,6 +19,10 @@ export default class extends Phaser.State {
     }
 
     create () {
-        this.state.start('StartMenu');
+        if (process.env.DEBUG === 'true' && process.env.DEBUG_SKIP_START_MENU === 'true') {
+            this.state.start('Battle');
+        } else {
+            this.state.start('StartMenu');
+        }
     }
 }
