@@ -1,6 +1,7 @@
 import 'pixi';
 import 'p2';
 import Phaser from 'phaser';
+import DebugHelper from './classes/DebugHelper';
 
 import BootState from './states/Boot';
 import SplashState from './states/Splash';
@@ -23,6 +24,11 @@ class Game extends Phaser.Game {
         this.state.add('Battle', BattleState, false);
         this.state.add('GameOver', GameOverState, false);
         this.state.add('StartMenu', StartMenu, false);
+
+        if (process.env.DEBUG === 'true') {
+            //add debugHelper to game
+            this.debugHelper = new DebugHelper(this);
+        }
 
         //with Cordova with need to wait that the device is ready so we will call the Boot state in another file
         if (!window.cordova) {

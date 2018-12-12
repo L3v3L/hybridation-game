@@ -17,7 +17,6 @@ let exports = {
     SHOW_CELL_IDS: false
 };
 
-
 //overides in debug mod
 if (process.env.DEBUG === 'true') {
     exports.AI_MOVE_DELAY_MS = process.env.DEBUG_AI_MOVE_DELAY_MS;
