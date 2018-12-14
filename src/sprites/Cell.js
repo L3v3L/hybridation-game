@@ -74,17 +74,6 @@ export default class extends Phaser.Group {
         this.hexagon.tint = this.getTint();
     }
 
-    isAdjacentTo (hexagon) {
-        let cellFound = false;
-        forEach(this.connections, function (connectionCell) {
-            if (typeof connectionCell === 'object' && connectionCell.id === hexagon.id) {
-                cellFound = true;
-                return false;
-            }
-        });
-        return cellFound;
-    }
-
     updateAttackText () {
         if (this.game.global.SHOW_CELL_IDS) {
             this.attackText.text = this.id;
@@ -315,5 +304,22 @@ export default class extends Phaser.Group {
             }
         }
         return -1;
+    }
+
+    isAdjacentTo (hexagon) {
+        let cellFound = false;
+        forEach(this.connections, function (connectionCell) {
+            if (typeof connectionCell === 'object' && connectionCell.id === hexagon.id) {
+                cellFound = true;
+                return false;
+            }
+        });
+        return cellFound;
+    }
+
+    isCellConnectedToAnyInCellArray (CellArray) {
+        return CellArray.find(function (cell) {
+            return cell.isAdjacentTo(this);
+        }, this);
     }
 }

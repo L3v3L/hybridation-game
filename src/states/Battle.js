@@ -209,8 +209,7 @@ export default class extends Phaser.State {
 
             let alreadyfoundIn = null;
             forEach(cell.player.clusters, function (cluster, key) {
-                let isCellConnectedToAnyInCellArray = cell.player.isCellConnectedToAnyInCellArray(cell, cluster);
-                if (isCellConnectedToAnyInCellArray) {
+                if (cell.isCellConnectedToAnyInCellArray(cluster)) {
                     if (alreadyfoundIn !== null) {
                         cell.player.clusters[alreadyfoundIn] = cell.player.clusters[alreadyfoundIn].concat(cluster);
                         cell.player.clusters[key] = [];

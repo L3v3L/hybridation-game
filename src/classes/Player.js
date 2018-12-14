@@ -196,17 +196,6 @@ export default class {
         this.gamestate.nextTurn();
     }
 
-    isCellConnectedToAnyInCellArray (needleCell, CellArray) {
-        let connection = false;
-        forEach(CellArray, function (cell) {
-            if (cell.isAdjacentTo(needleCell)) {
-                connection = cell;
-                return false;
-            }
-        });
-        return connection;
-    }
-
     getHighestClusterLength () {
         let length = 0;
         forEach(this.clusters, function (cluster) {
