@@ -14,23 +14,13 @@ export default class extends Phaser.State {
     }
 
     create () {
-        //settings
-        const acceptedPlayerColors = [
-            Phaser.Color.VIOLET,
-            Phaser.Color.AQUA,
-            Phaser.Color.GREEN,
-            Phaser.Color.YELLOW,
-            Phaser.Color.ORANGE,
-            Phaser.Color.BLUE
-        ];
-
         //load globals
         this.initGlobals();
         //set world dimensions
         this.worldWidth = this.game.global.WORLD_WIDTH;
         this.worldHeight = this.game.global.WORLD_HEIGHT;
-        this.cellWidth = 40;
-        this.cellHeight = 40;
+        this.cellWidth = this.game.global.CELL_WIDTH;
+        this.cellHeight = this.game.global.CELL_HEIGHT;
 
         //generate players
         for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
@@ -39,7 +29,7 @@ export default class extends Phaser.State {
                 this,
                 i,
                 `Player ${i + 1}`,
-                acceptedPlayerColors[i % acceptedPlayerColors.length],
+                this.game.global.COLOR_PALETTE[i % this.game.global.COLOR_PALETTE.length],
                 true
             ));
         }

@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 let exports = {
     ALL_CELLS: null,
     SELECTED_CELL: null,
@@ -14,7 +16,17 @@ let exports = {
     PLAYERS_IN_GAME: [],
     TURN_COUNTER: 0,
     NO_USER_TURN: false,
-    SHOW_CELL_IDS: false
+    SHOW_CELL_IDS: false,
+    COLOR_PALETTE: [
+        Phaser.Color.VIOLET,
+        Phaser.Color.AQUA,
+        Phaser.Color.GREEN,
+        Phaser.Color.YELLOW,
+        Phaser.Color.ORANGE,
+        Phaser.Color.BLUE
+    ],
+    CELL_WIDTH: 40,
+    CELL_HEIGHT: 40
 };
 
 //overides in debug mod
