@@ -307,14 +307,9 @@ export default class extends Phaser.Group {
     }
 
     isAdjacentTo (hexagon) {
-        let cellFound = false;
-        forEach(this.connections, function (connectionCell) {
-            if (typeof connectionCell === 'object' && connectionCell.id === hexagon.id) {
-                cellFound = true;
-                return false;
-            }
-        });
-        return cellFound;
+        return this.connections.find(function (connectionCell) {
+            return (typeof connectionCell === 'object' && connectionCell.id === hexagon.id)
+        }, hexagon);
     }
 
     isCellConnectedToAnyInCellArray (CellArray) {
