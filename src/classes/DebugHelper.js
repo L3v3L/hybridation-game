@@ -14,4 +14,8 @@ export default class {
             }
         }
     }
+
+    restartBattle () {
+        this.game.state.start('Battle');
+    }
 }
