@@ -4,8 +4,8 @@ export default class {
         //need to default connection limit
         this.connections = [];
         this.connectionCount = connectionCount;
-        this.x = null;
-        this.y = null;
+        this.cellX = null;
+        this.cellY = null;
         this.asset = null;
         this.clusterBelongs = null;
     }
@@ -15,8 +15,8 @@ export default class {
      * @param positionArray
      */
     setPosition (positionArray) {
-        this.x = positionArray[0];
-        this.y = positionArray[1];
+        this.cellX = positionArray[0];
+        this.cellY = positionArray[1];
     }
 
     /**
@@ -41,17 +41,17 @@ export default class {
         direction = this.limPos(direction);
         switch (direction) {
             case 0:
-                return [this.x, this.y - 2];
+                return [this.cellX, this.cellY - 2];
             case 1:
-                return [this.x + 1, this.y - 1];
+                return [this.cellX + 1, this.cellY - 1];
             case 2:
-                return [this.x + 1, this.y + 1];
+                return [this.cellX + 1, this.cellY + 1];
             case 3:
-                return [this.x, this.y + 2];
+                return [this.cellX, this.cellY + 2];
             case 4:
-                return [this.x - 1, this.y + 1];
+                return [this.cellX - 1, this.cellY + 1];
             case 5:
-                return [this.x - 1, this.y - 1];
+                return [this.cellX - 1, this.cellY - 1];
         }
     }
 
@@ -60,11 +60,11 @@ export default class {
      * @returns {*}
      */
     getPosition () {
-        if (this.x === null || this.y === null) {
+        if (this.cellX === null || this.cellY === null) {
             return null;
         }
 
-        return [this.x, this.y];
+        return [this.cellX, this.cellY];
     }
 
     /**

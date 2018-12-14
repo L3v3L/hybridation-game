@@ -50,8 +50,8 @@ export default class extends Phaser.State {
         for (let i = 0; i < shadowArray.length; i++) {
             let hexagonShadow = new Phaser.Sprite(
                 this.game,
-                (shadowArray[i].x * ((cellWidth / 4) * 3)) + this.game.world.centerX + 5,
-                (shadowArray[i].y * (cellHeight / 2)) + this.game.world.centerY + 5,
+                (shadowArray[i].cellX * ((cellWidth / 4) * 3)) + this.game.world.centerX + 5,
+                (shadowArray[i].cellY * (cellHeight / 2)) + this.game.world.centerY + 5,
                 'hexagon');
             hexagonShadow.anchor.setTo(0.5);
             hexagonShadow.inputEnabled = false;
@@ -77,8 +77,8 @@ export default class extends Phaser.State {
             let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % cellArray.length]]);
             let hexagon = new Hexagon({
                 game: this.game,
-                x: (cellArray[i].x * ((cellWidth / 4) * 3)) + this.game.world.centerX,
-                y: (cellArray[i].y * (cellHeight / 2)) + this.game.world.centerY,
+                x: (cellArray[i].cellX * ((cellWidth / 4) * 3)) + this.game.world.centerX,
+                y: (cellArray[i].cellY * (cellHeight / 2)) + this.game.world.centerY,
                 width: cellWidth,
                 height: cellHeight,
                 asset: 'hexagon',
