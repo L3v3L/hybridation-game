@@ -1,12 +1,17 @@
 import Phaser from 'phaser';
 import color from 'color';
-import { forEach } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, player, state, attack, id, connectionCount}) {
         super(game, x, y, asset);
+        this.id = id;
+        //need to default connection limit
+        this.connections = [];
+        this.connectionCount = connectionCount;
+        this.cellX = null;
+        this.cellY = null;
+        this.clusterBelongs = null;
         this.game = game;
-
         this.player = player;
         this.state = state;
         this.attack = attack;
@@ -19,6 +24,7 @@ export default class extends Phaser.Group {
         this.hexagon.tint = this.getTint();
         this.hexagon.width = width;
         this.hexagon.height = height;
+        this.add(this.hexagon);
 
         if (this.game.global.SHOW_CELL_IDS) {
             this.labelText = this.id;
@@ -37,16 +43,7 @@ export default class extends Phaser.Group {
         this.attackText.smoothed = false;
         this.attackText.setShadow(1, 1, 'rgba(0,0,0,1)', 0);
         this.attackText.anchor.set(0.5);
-        this.add(this.hexagon);
         this.add(this.attackText);
-
-        this.id = id;
-        //need to default connection limit
-        this.connections = [];
-        this.connectionCount = connectionCount;
-        this.cellX = null;
-        this.cellY = null;
-        this.clusterBelongs = null;
     }
 
     getTint () {

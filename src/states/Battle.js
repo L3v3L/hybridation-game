@@ -1,6 +1,6 @@
 //globals __DEV__
 import Phaser from 'phaser';
-import Hexagon from '../sprites/Cell';
+import Cell from '../sprites/Cell';
 import globals from '../globals';
 import { cloneDeep, forEach, random, shuffle, floor } from 'lodash';
 import Player from '../classes/Player';
@@ -134,7 +134,7 @@ export default class extends Phaser.State {
 
         for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
             let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % (this.worldWidth * this.worldHeight)]]);
-            let hexagon = new Hexagon({
+            let hexagon = new Cell({
                 game: this.game,
                 x: null,
                 y: null,
