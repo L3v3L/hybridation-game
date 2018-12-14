@@ -1,7 +1,6 @@
 //globals __DEV__
 import Phaser from 'phaser';
-import Hexagon from '../sprites/Hexagon';
-import Cell from '../classes/Cell';
+import Hexagon from '../sprites/Cell';
 import globals from '../globals';
 import { cloneDeep, forEach, random, shuffle, floor } from 'lodash';
 import Player from '../classes/Player';
@@ -27,8 +26,11 @@ export default class extends Phaser.State {
 
         //load globals
         this.initGlobals();
-        let cellWidth = 40;
-        let cellHeight = 40;
+        //set world dimensions
+        this.worldWidth = this.game.global.WORLD_WIDTH;
+        this.worldHeight = this.game.global.WORLD_HEIGHT;
+        this.cellWidth = 40;
+        this.cellHeight = 40;
 
         //generate players
         for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
@@ -45,54 +47,10 @@ export default class extends Phaser.State {
         //config user player
         this.game.global.PLAYER_ARRAY[0].isAI = false;
 
-        //generate shadow
-        let shadowArray = this.createWorldArray();
-        for (let i = 0; i < shadowArray.length; i++) {
-            let hexagonShadow = new Phaser.Sprite(
-                this.game,
-                (shadowArray[i].cellX * ((cellWidth / 4) * 3)) + this.game.world.centerX + 5,
-                (shadowArray[i].cellY * (cellHeight / 2)) + this.game.world.centerY + 5,
-                'hexagon');
-            hexagonShadow.anchor.setTo(0.5);
-            hexagonShadow.inputEnabled = false;
-            hexagonShadow.tint = 'black';
-            hexagonShadow.width = cellWidth;
-            hexagonShadow.height = cellHeight;
-
-            shadowArray[i].asset = hexagonShadow;
-
-            this.game.add.existing(hexagonShadow);
-
-            hexagonShadow.sendToBack();
-        }
-
         //generate tiles
         let cellArray = this.createWorldArray();
+
         this.game.global.ALL_CELLS = cellArray;
-
-        let createPlayerAssignmentArray = this.createPlayerAssignmentArray();
-        let attackAssignmentArray = this.createAttackAssignmentArray();
-
-        for (let i = 0; i < cellArray.length; i++) {
-            let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % cellArray.length]]);
-            let hexagon = new Hexagon({
-                game: this.game,
-                x: (cellArray[i].cellX * ((cellWidth / 4) * 3)) + this.game.world.centerX,
-                y: (cellArray[i].cellY * (cellHeight / 2)) + this.game.world.centerY,
-                width: cellWidth,
-                height: cellHeight,
-                asset: 'hexagon',
-                id: cellArray[i].id,
-                cell: cellArray[i],
-                player: player,
-                attack: attackAssignmentArray[player.id].pop(),
-                state: 1
-            });
-
-            cellArray[i].asset = hexagon;
-
-            this.game.add.existing(hexagon);
-        }
 
         //set starting player
         this.game.global.CURRENT_PLAYER = 0;
@@ -117,7 +75,7 @@ export default class extends Phaser.State {
 
     createPlayerAssignmentArray () {
         let playerAssignmentArray = [];
-        let countCells = this.game.global.ALL_CELLS.length;
+        let countCells = this.worldWidth * this.worldHeight;
         let countPlayers = this.game.global.PLAYER_ARRAY.length;
         //todo handle floats
         let amountCellsEachPlayer = countCells / countPlayers;
@@ -132,7 +90,7 @@ export default class extends Phaser.State {
     }
 
     createAttackAssignmentArray () {
-        let countCells = this.game.global.ALL_CELLS.length;
+        let countCells = this.worldWidth * this.worldHeight;
         let countPlayers = this.game.global.PLAYER_ARRAY.length;
         let amountCellsEachPlayer = countCells / countPlayers;
 
@@ -168,14 +126,28 @@ export default class extends Phaser.State {
      *
      */
     createWorldArray () {
-        let worldWidth = this.game.global.WORLD_WIDTH;
-        let worldHeight = this.game.global.WORLD_HEIGHT;
-
         let cellArray = [];
         let cellsToFill = [];
 
-        for (let i = 0; i < worldWidth * worldHeight; i++) {
-            cellArray.push(new Cell(i, 6));
+        let createPlayerAssignmentArray = this.createPlayerAssignmentArray();
+        let attackAssignmentArray = this.createAttackAssignmentArray();
+
+        for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
+            let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % (this.worldWidth * this.worldHeight)]]);
+            let hexagon = new Hexagon({
+                game: this.game,
+                x: null,
+                y: null,
+                width: this.cellWidth,
+                height: this.cellHeight,
+                asset: 'hexagon',
+                player: player,
+                attack: attackAssignmentArray[player.id].pop(),
+                state: 1,
+                id: i,
+                connectionCount: 6
+            });
+            cellArray.push(hexagon);
         }
 
         cellArray[0].setPosition([0, 0]);
@@ -213,6 +185,14 @@ export default class extends Phaser.State {
             }
         }
 
+        //fill x and y and add to game
+        cellArray = cellArray.map(function (item) {
+            item.x = (item.cellX * ((this.cellWidth / 4) * 3)) + this.game.world.centerX;
+            item.y = (item.cellY * (this.cellHeight / 2)) + this.game.world.centerY;
+            this.game.add.existing(item);
+            return item;
+        }, this);
+
         return cellArray;
     }
 
@@ -225,15 +205,15 @@ export default class extends Phaser.State {
         });
 
         forEach(this.game.global.ALL_CELLS, function (cell) {
-            cell.asset.player.increaseTerritory();
+            cell.player.increaseTerritory();
 
             let alreadyfoundIn = null;
-            forEach(cell.asset.player.clusters, function (cluster, key) {
-                let isCellConnectedToAnyInCellArray = cell.asset.player.isCellConnectedToAnyInCellArray(cell, cluster);
+            forEach(cell.player.clusters, function (cluster, key) {
+                let isCellConnectedToAnyInCellArray = cell.player.isCellConnectedToAnyInCellArray(cell, cluster);
                 if (isCellConnectedToAnyInCellArray) {
                     if (alreadyfoundIn !== null) {
-                        cell.asset.player.clusters[alreadyfoundIn] = cell.asset.player.clusters[alreadyfoundIn].concat(cluster);
-                        cell.asset.player.clusters[key] = [];
+                        cell.player.clusters[alreadyfoundIn] = cell.player.clusters[alreadyfoundIn].concat(cluster);
+                        cell.player.clusters[key] = [];
                         cluster = null;
                     } else {
                         cell.clusterBelongs = cluster;
@@ -246,7 +226,7 @@ export default class extends Phaser.State {
             if (alreadyfoundIn === null) {
                 let newCluster = [cell];
                 cell.clusterBelongs = newCluster;
-                cell.asset.player.clusters.push(newCluster);
+                cell.player.clusters.push(newCluster);
             }
         });
 
@@ -289,8 +269,8 @@ export default class extends Phaser.State {
 
     getPlayersInGame () {
         return this.game.global.PLAYER_ARRAY.filter(function (player) {
-            for (let i = 0; i < this.game.global.ALL_CELLS.length; i++) {
-                if (this.game.global.ALL_CELLS[i].asset.player.id === player.id) {
+            for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
+                if (this.game.global.ALL_CELLS[i].player.id === player.id) {
                     return true;
                 }
             }
@@ -310,13 +290,13 @@ export default class extends Phaser.State {
 
                 let randomCellId = random(playersCells.length - 1);
                 //remove cell if reached max
-                if (playersCells[randomCellId].asset.attack >= this.game.global.MAX_ATTACK) {
+                if (playersCells[randomCellId].attack >= this.game.global.MAX_ATTACK) {
                     playersCells.splice(randomCellId, 1);
                     i--;
                     continue;
                 }
 
-                playersCells[randomCellId].asset.increaseAttack();
+                playersCells[randomCellId].increaseAttack();
             }
         }
     }

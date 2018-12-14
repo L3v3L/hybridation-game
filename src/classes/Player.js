@@ -40,8 +40,8 @@ export default class {
 
         //find best play for each players cell
         forEach(this.game.global.ALL_CELLS, function (cell) {
-            if (cell.asset.player.id === playerId && cell.asset.attack > 1) {
-                let possibleMovesTemp = cell.asset.scoreMoves();
+            if (cell.player.id === playerId && cell.attack > 1) {
+                let possibleMovesTemp = cell.scoreMoves();
                 let newMove = null;
                 if (typeof possibleMovesTemp === 'object' && possibleMovesTemp.length > 0) {
                     let highestValue = Math.max.apply(Math, possibleMovesTemp.map(function (o) {
@@ -53,8 +53,8 @@ export default class {
                     }, highestValue);
 
                     newMove = {
-                        selectedHexagon: cell.asset,
-                        targetHexagon: targetCell.asset
+                        selectedHexagon: cell,
+                        targetHexagon: targetCell
                     };
                 }
                 if (newMove !== null) {
@@ -199,7 +199,7 @@ export default class {
     isCellConnectedToAnyInCellArray (needleCell, CellArray) {
         let connection = false;
         forEach(CellArray, function (cell) {
-            if (cell.asset.isAdjacentTo(needleCell.asset)) {
+            if (cell.isAdjacentTo(needleCell)) {
                 connection = cell;
                 return false;
             }
