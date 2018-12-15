@@ -46,6 +46,9 @@ export default class extends Phaser.Group {
         this.add(this.attackText);
     }
 
+    /**
+     *
+     */
     getTint () {
         let minPercentage = 0.5;
         let range = 1 - minPercentage;
@@ -54,23 +57,34 @@ export default class extends Phaser.Group {
         let tint = color(this.player.tint).lighten(1 - (minPercentage + inRangePercentage)).rgbNumber();
         return tint;
     }
-
+    /**
+     *
+     */
     mclick () {
         let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
         currentPlayer.interact(this);
     }
 
+    /**
+     *
+     */
     select () {
         this.selected = true;
         this.hexagon.tint = Phaser.Color.RED;
         return this;
     }
 
+    /**
+     *
+     */
     unselect () {
         this.selected = false;
         this.hexagon.tint = this.getTint();
     }
 
+    /**
+     *
+     */
     updateAttackText () {
         if (this.game.global.SHOW_CELL_IDS) {
             this.attackText.text = this.id;
@@ -79,20 +93,34 @@ export default class extends Phaser.Group {
         }
     }
 
+    /**
+     *
+     */
     isSelected () {
         return this.selected;
     }
 
+    /**
+     *
+     * @param {*} playerId
+     */
     isOwnedBy (playerId) {
         return playerId === this.player.id;
     }
 
+    /**
+     *
+     */
     increaseAttack () {
         this.attack = this.attack + 1;
         this.hexagon.tint = this.getTint();
         this.updateAttackText();
     }
 
+    /**
+     *
+     * @param {*} onlyPlayer
+     */
     getConnectionsByPlayer (onlyPlayer = null) {
         let possibleMoves = this.connections.filter(function (cell) {
             if (onlyPlayer) {
@@ -104,6 +132,9 @@ export default class extends Phaser.Group {
         return possibleMoves;
     }
 
+    /**
+     *
+     */
     scoreMoves () {
         let possibleMoves = this.getConnectionsByPlayer();
 
@@ -282,6 +313,8 @@ export default class extends Phaser.Group {
 
     /**
      * find first open connection
+     * @param {*} empty
+     * @param {*} clockwise
      */
     findFirst (empty, clockwise) {
         let typeToFind = empty ? 'undefined' : 'object';
@@ -303,14 +336,22 @@ export default class extends Phaser.Group {
         return -1;
     }
 
-    isAdjacentTo (hexagon) {
+    /**
+     *
+     * @param {*} cell
+     */
+    isAdjacentTo (cell) {
         return this.connections.find(function (connectionCell) {
-            return (typeof connectionCell === 'object' && connectionCell.id === hexagon.id)
-        }, hexagon);
+            return (typeof connectionCell === 'object' && connectionCell.id === cell.id);
+        }, cell);
     }
 
-    isCellConnectedToAnyInCellArray (CellArray) {
-        return CellArray.find(function (cell) {
+    /**
+     *
+     * @param {*} arrayOfCells
+     */
+    isCellConnectedToAnyInCellArray (arrayOfCells) {
+        return arrayOfCells.find(function (cell) {
             return cell.isAdjacentTo(this);
         }, this);
     }
