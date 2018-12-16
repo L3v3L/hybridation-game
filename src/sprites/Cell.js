@@ -57,6 +57,7 @@ export default class extends Phaser.Group {
         let tint = color(this.player.tint).lighten(1 - (minPercentage + inRangePercentage)).rgbNumber();
         return tint;
     }
+
     /**
      *
      */

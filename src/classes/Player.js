@@ -74,6 +74,10 @@ export default class {
         return bestMove;
     }
 
+    /**
+     *
+     * @param {*} targetHexagon
+     */
     interact (targetHexagon) {
         if (this.isAI) {
             return false;
@@ -99,6 +103,10 @@ export default class {
         return true;
     }
 
+    /**
+     *
+     * @param {*} defender
+     */
     capture (defender) {
         let attackerRoll = this.roll(this.selectedHexagon);
         let defenderRoll = this.roll(defender);
@@ -125,6 +133,10 @@ export default class {
         }
     }
 
+    /**
+     *
+     * @param {*} absorbedHexagon
+     */
     absorb (absorbedHexagon) {
         //Before absorbing the territory, update territory count
         this.increaseTerritory();
@@ -146,6 +158,10 @@ export default class {
         this.selectedHexagon = absorbedHexagon.select();
     }
 
+    /**
+     *
+     * @param {*} hexagon
+     */
     roll (hexagon) {
         let roll = 0;
         let n = 0;
