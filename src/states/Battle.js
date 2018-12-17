@@ -22,20 +22,8 @@ export default class extends Phaser.State {
         this.cellWidth = this.game.global.CELL_WIDTH;
         this.cellHeight = this.game.global.CELL_HEIGHT;
 
-        //generate players
-        for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
-            this.game.global.PLAYER_ARRAY.push(new Player(
-                this.game,
-                this,
-                i,
-                `Player ${i + 1}`,
-                this.game.global.COLOR_PALETTE[i % this.game.global.COLOR_PALETTE.length],
-                true
-            ));
-        }
-
-        //config user player
-        this.game.global.PLAYER_ARRAY[0].isAI = false;
+        //initalze players
+        this.initPlayers();
 
         //generate tiles
         let cellArray = this.createWorldArray();
@@ -61,6 +49,23 @@ export default class extends Phaser.State {
 
     initGlobals () {
         this.game.global = cloneDeep(globals);
+    }
+
+    initPlayers () {
+        //generate players
+        for (let i = 0; i < this.game.global.NUMBER_OF_PLAYERS; i++) {
+            this.game.global.PLAYER_ARRAY.push(new Player(
+                this.game,
+                this,
+                i,
+                `Player ${i + 1}`,
+                this.game.global.COLOR_PALETTE[i % this.game.global.COLOR_PALETTE.length],
+                true
+            ));
+        }
+
+        //config user player
+        this.game.global.PLAYER_ARRAY[0].isAI = false;
     }
 
     createPlayerAssignmentArray () {
