@@ -13,6 +13,7 @@ export default class {
         this.score = 0;
         this.timer = this.game.time.create(false);
         this.clusters = [];
+        this.playerBadge = null;
     }
 
     act () {
@@ -182,6 +183,9 @@ export default class {
 
     refreshScore () {
         this.score = this.getHighestClusterLength();
+        if (this.score === 0) {
+            this.playerBadge.hide();
+        }
     }
 
     getScore (score) {

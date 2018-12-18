@@ -19,12 +19,15 @@ export default class Hud extends Phaser.Group {
 
         this.playerBadges = [];
         for (let [index, value] of this.game.global.PLAYER_ARRAY.entries()) {
-            this.playerBadges.push(new PlayerBadge({
+            let playerBadge = new PlayerBadge({
                 game: this.game,
                 player: value,
                 x: (index * 110) + 115,
                 y: 15
-            }));
+            });
+
+            value.playerBadge = playerBadge;
+            this.playerBadges.push(playerBadge);
         }
 
         this.endTurnButton = new TextButton({

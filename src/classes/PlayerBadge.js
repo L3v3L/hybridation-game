@@ -97,4 +97,8 @@ export default class PlayerBadge extends Phaser.Group {
         this.playerTerritoryObj.setStyle(this.greySmallText);
         this.playerScoreObj.setStyle(this.greySmallText);
     }
+
+    hide () {
+        this.visible = false;
+    }
 };
