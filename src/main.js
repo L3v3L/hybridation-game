@@ -27,7 +27,7 @@ class Game extends Phaser.Game {
 
         if (process.env.DEBUG === 'true') {
             //add debugHelper to game
-            this.debugHelper = new DebugHelper(this);
+            window.debugHelper = new DebugHelper(this);
         }
 
         //with Cordova with need to wait that the device is ready so we will call the Boot state in another file
