@@ -15,6 +15,10 @@ export default class {
         }
     }
 
+    getGlobals () {
+        return this.game.global;
+    }
+
     restartBattle () {
         this.game.state.start('Battle');
     }
