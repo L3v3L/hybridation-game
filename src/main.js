@@ -26,7 +26,7 @@ class Game extends Phaser.Game {
         this.state.add('StartMenu', StartMenu, false);
 
         if (process.env.DEBUG === 'true') {
-            //add debugHelper to game
+            //add debugHelper to window
             window.debugHelper = new DebugHelper(this);
         }
 
