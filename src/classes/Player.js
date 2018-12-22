@@ -112,9 +112,14 @@ export default class {
         let attackerRoll = this.roll(this.selectedHexagon);
         let defenderRoll = this.roll(defender);
 
+        let ratio = attackerRoll / (attackerRoll + defenderRoll);
+
+        this.game.battleBar.showResuls();
+        this.game.battleBar.setColors(this.tint, defender.player.tint);
+        this.game.battleBar.setBarRatio(ratio);
+
         if (attackerRoll > defenderRoll) {
             //Success
-            this.game.hud.updateMessage(`${this.name} (${attackerRoll}) won an attack against ${defender.player.name} (${defenderRoll})`);
             this.absorb(defender);
             if (this.selectedHexagon.attack === 1) {
                 this.selectedHexagon.unselect();
@@ -123,7 +128,6 @@ export default class {
             return true;
         } else {
             //Failure
-            this.game.hud.updateMessage(`${this.name} (${attackerRoll}) failed an attack against ${defender.player.name} (${defenderRoll})`);
             this.selectedHexagon.attack = 1;
             this.selectedHexagon.updateAttackText();
             if (this.selectedHexagon.attack === 1) {

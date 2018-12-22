@@ -5,6 +5,7 @@ import globals from '../globals';
 import { cloneDeep, forEach, random, shuffle, floor } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud';
+import BattleBar from '../classes/BattleBar';
 
 export default class extends Phaser.State {
     init () {
@@ -42,6 +43,9 @@ export default class extends Phaser.State {
             game: this.game,
             player: this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]
         });
+
+        //initialize BattleBar
+        this.game.battleBar = new BattleBar({game: this.game});
     }
 
     render () {
