@@ -229,7 +229,7 @@ export default class extends Phaser.State {
         });
 
         forEach(this.game.global.PLAYER_ARRAY, function (player) {
-            player.refreshScore();
+            player.updateScore();
         });
     }
 

@@ -27,7 +27,7 @@ export default class {
         let move = this.generateMove();
         if (move !== null) {
             this.selectedHexagon = move.selectedHexagon;
-            this.capture(move.targetHexagon);
+            this.tryCapture(move.targetHexagon);
             this.clearSelection();
         } else {
             this.timer.stop(true);
@@ -97,7 +97,7 @@ export default class {
                     this.selectedHexagon = null;
                 }
             } else if (this.selectedHexagon !== null && targetHexagon.isAdjacentTo(this.selectedHexagon)) {
-                this.capture(targetHexagon);
+                this.tryCapture(targetHexagon);
             }
         }
 
@@ -108,19 +108,19 @@ export default class {
      *
      * @param {*} defender
      */
-    capture (defender) {
+    tryCapture (defenderCell) {
         let attackerRoll = this.roll(this.selectedHexagon);
-        let defenderRoll = this.roll(defender);
+        let defenderCellRoll = this.roll(defenderCell);
 
-        let ratio = attackerRoll / (attackerRoll + defenderRoll);
+        let ratio = attackerRoll / (attackerRoll + defenderCellRoll);
 
         this.game.battleBar.showResuls();
-        this.game.battleBar.setColors(this.tint, defender.player.tint);
+        this.game.battleBar.setColors(this.tint, defenderCell.player.tint);
         this.game.battleBar.setBarRatio(ratio);
 
-        if (attackerRoll > defenderRoll) {
+        if (attackerRoll > defenderCellRoll) {
             //Success
-            this.absorb(defender);
+            this.takeControlOfCell(defenderCell);
             if (this.selectedHexagon.attack === 1) {
                 this.selectedHexagon.unselect();
                 this.clearSelection();
@@ -142,7 +142,7 @@ export default class {
      *
      * @param {*} absorbedHexagon
      */
-    absorb (absorbedHexagon) {
+    takeControlOfCell (absorbedHexagon) {
         //Before absorbing the territory, update territory count
         this.increaseTerritory();
         absorbedHexagon.player.decreaseTerritory();
@@ -185,7 +185,7 @@ export default class {
         }
     }
 
-    refreshScore () {
+    updateScore () {
         this.score = this.getHighestClusterLength();
         if (this.score === 0) {
             this.playerBadge.hide();
