@@ -27,7 +27,7 @@ export default class {
         let move = this.generateMove();
         if (move !== null) {
             this.selectedCell = move.selectedCell;
-            this.tryCapture(move.targetHexagon);
+            this.tryCapture(move.targetCell);
             this.clearSelection();
         } else {
             this.timer.stop(true);
@@ -55,7 +55,7 @@ export default class {
 
                     newMove = {
                         selectedCell: cell,
-                        targetHexagon: targetCell
+                        targetCell: targetCell
                     };
                 }
                 if (newMove !== null) {
@@ -77,27 +77,27 @@ export default class {
 
     /**
      *
-     * @param {*} targetHexagon
+     * @param {*} targetCell
      */
-    interact (targetHexagon) {
+    interact (targetCell) {
         if (this.isAI) {
             return false;
         }
 
-        if (targetHexagon !== null) {
-            if (targetHexagon.isOwnedBy(this.id)) {
-                if (targetHexagon.isSelected() === false && targetHexagon.attack > 1) {
+        if (targetCell !== null) {
+            if (targetCell.isOwnedBy(this.id)) {
+                if (targetCell.isSelected() === false && targetCell.attack > 1) {
                     //remove selection from last selected
                     if (this.selectedCell !== null) {
                         this.selectedCell.unselect();
                     }
-                    this.selectedCell = targetHexagon.select();
-                } else if (targetHexagon.isSelected() === true && targetHexagon === this.selectedCell) {
-                    targetHexagon.unselect();
+                    this.selectedCell = targetCell.select();
+                } else if (targetCell.isSelected() === true && targetCell === this.selectedCell) {
+                    targetCell.unselect();
                     this.selectedCell = null;
                 }
-            } else if (this.selectedCell !== null && targetHexagon.isAdjacentTo(this.selectedCell)) {
-                this.tryCapture(targetHexagon);
+            } else if (this.selectedCell !== null && targetCell.isAdjacentTo(this.selectedCell)) {
+                this.tryCapture(targetCell);
             }
         }
 
@@ -154,24 +154,24 @@ export default class {
         absorbedCell.attack = this.selectedCell.attack - 1;
         absorbedCell.updateAttackText();
 
-        //Drop the attack value of the attacker hexagon
+        //Drop the attack value of the attacker cell
         this.selectedCell.attack = 1;
         this.selectedCell.updateAttackText();
 
-        //Change selection to the newly absorbed hexagon
+        //Change selection to the newly absorbed cell
         this.clearSelection();
         this.selectedCell = absorbedCell.select();
     }
 
     /**
      *
-     * @param {*} hexagon
+     * @param {*} cell
      */
-    roll (hexagon) {
+    roll (cell) {
         let roll = 0;
         let n = 0;
 
-        while (n < hexagon.attack) {
+        while (n < cell.attack) {
             roll += random(1, 6);
             n++;
         }

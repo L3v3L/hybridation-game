@@ -133,7 +133,7 @@ export default class extends Phaser.State {
 
         for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
             let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % (this.worldWidth * this.worldHeight)]]);
-            let hexagon = new Cell({
+            let cell = new Cell({
                 game: this.game,
                 x: null,
                 y: null,
@@ -146,7 +146,7 @@ export default class extends Phaser.State {
                 id: i,
                 connectionCount: 6
             });
-            cellArray.push(hexagon);
+            cellArray.push(cell);
         }
 
         cellArray[0].setPosition([0, 0]);
