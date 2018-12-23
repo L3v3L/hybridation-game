@@ -8,7 +8,7 @@ export default class {
         this.name = name;
         this.tint = tint;
         this.isAI = isAI;
-        this.selectedHexagon = null;
+        this.selectedCell = null;
         this.territory = 0;
         this.score = 0;
         this.timer = this.game.time.create(false);
@@ -26,7 +26,7 @@ export default class {
     playMove () {
         let move = this.generateMove();
         if (move !== null) {
-            this.selectedHexagon = move.selectedHexagon;
+            this.selectedCell = move.selectedCell;
             this.tryCapture(move.targetHexagon);
             this.clearSelection();
         } else {
@@ -54,7 +54,7 @@ export default class {
                     }, highestValue);
 
                     newMove = {
-                        selectedHexagon: cell,
+                        selectedCell: cell,
                         targetHexagon: targetCell
                     };
                 }
@@ -88,15 +88,15 @@ export default class {
             if (targetHexagon.isOwnedBy(this.id)) {
                 if (targetHexagon.isSelected() === false && targetHexagon.attack > 1) {
                     //remove selection from last selected
-                    if (this.selectedHexagon !== null) {
-                        this.selectedHexagon.unselect();
+                    if (this.selectedCell !== null) {
+                        this.selectedCell.unselect();
                     }
-                    this.selectedHexagon = targetHexagon.select();
-                } else if (targetHexagon.isSelected() === true && targetHexagon === this.selectedHexagon) {
+                    this.selectedCell = targetHexagon.select();
+                } else if (targetHexagon.isSelected() === true && targetHexagon === this.selectedCell) {
                     targetHexagon.unselect();
-                    this.selectedHexagon = null;
+                    this.selectedCell = null;
                 }
-            } else if (this.selectedHexagon !== null && targetHexagon.isAdjacentTo(this.selectedHexagon)) {
+            } else if (this.selectedCell !== null && targetHexagon.isAdjacentTo(this.selectedCell)) {
                 this.tryCapture(targetHexagon);
             }
         }
@@ -109,7 +109,7 @@ export default class {
      * @param {*} defender
      */
     tryCapture (defenderCell) {
-        let attackerRoll = this.roll(this.selectedHexagon);
+        let attackerRoll = this.roll(this.selectedCell);
         let defenderCellRoll = this.roll(defenderCell);
 
         let ratio = attackerRoll / (attackerRoll + defenderCellRoll);
@@ -121,17 +121,17 @@ export default class {
         if (attackerRoll > defenderCellRoll) {
             //Success
             this.takeControlOfCell(defenderCell);
-            if (this.selectedHexagon.attack === 1) {
-                this.selectedHexagon.unselect();
+            if (this.selectedCell.attack === 1) {
+                this.selectedCell.unselect();
                 this.clearSelection();
             }
             return true;
         } else {
             //Failure
-            this.selectedHexagon.attack = 1;
-            this.selectedHexagon.updateAttackText();
-            if (this.selectedHexagon.attack === 1) {
-                this.selectedHexagon.unselect();
+            this.selectedCell.attack = 1;
+            this.selectedCell.updateAttackText();
+            if (this.selectedCell.attack === 1) {
+                this.selectedCell.unselect();
                 this.clearSelection();
             }
             return false;
@@ -140,27 +140,27 @@ export default class {
 
     /**
      *
-     * @param {*} absorbedHexagon
+     * @param {*} absorbedCell
      */
-    takeControlOfCell (absorbedHexagon) {
+    takeControlOfCell (absorbedCell) {
         //Before absorbing the territory, update territory count
         this.increaseTerritory();
-        absorbedHexagon.player.decreaseTerritory();
+        absorbedCell.player.decreaseTerritory();
 
-        //Take the absorbedHexagon as our own
-        absorbedHexagon.player = this;
+        //Take the absorbedCell as our own
+        absorbedCell.player = this;
 
         //Inherit attack value from the attacker
-        absorbedHexagon.attack = this.selectedHexagon.attack - 1;
-        absorbedHexagon.updateAttackText();
+        absorbedCell.attack = this.selectedCell.attack - 1;
+        absorbedCell.updateAttackText();
 
         //Drop the attack value of the attacker hexagon
-        this.selectedHexagon.attack = 1;
-        this.selectedHexagon.updateAttackText();
+        this.selectedCell.attack = 1;
+        this.selectedCell.updateAttackText();
 
         //Change selection to the newly absorbed hexagon
         this.clearSelection();
-        this.selectedHexagon = absorbedHexagon.select();
+        this.selectedCell = absorbedCell.select();
     }
 
     /**
@@ -179,9 +179,9 @@ export default class {
     }
 
     clearSelection () {
-        if (this.selectedHexagon !== null) {
-            this.selectedHexagon.unselect();
-            this.selectedHexagon = null;
+        if (this.selectedCell !== null) {
+            this.selectedCell.unselect();
+            this.selectedCell = null;
         }
     }
 
