@@ -1,6 +1,7 @@
 export default class {
     constructor (game) {
         this.game = game;
+        this.selectedCell = null;
     }
 
     changeCurrentPlayer (playerId) {
