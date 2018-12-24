@@ -43,7 +43,8 @@
         "lodash": "4.17.11",
         "phaser-ce": "^2.11.0",
         "webfontloader": "^1.6.28",
-        "dotenv-webpack": "1.5.7"
+        "dotenv-webpack": "1.5.7",
+        "conf": "2.1.0"
     },
     "cordova": {
         "platforms": [
