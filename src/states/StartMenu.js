@@ -33,6 +33,31 @@ export default class extends Phaser.State {
         restartBtn.anchor.setTo(0.5);
         this.game.add.existing(restartBtn);
 
+        let tutorialBtn = new TextButton({
+            game: this.game,
+            x: this.game.world.centerX,
+            y: this.game.world.centerY + 50,
+            asset: 'greySheet',
+            callback: this.startTutorial,
+            callbackContext: this,
+            overFrame: 'button0',
+            outFrame: 'button0',
+            downFrame: 'button0',
+            upFrame: 'button0',
+            tint: Phaser.Color.ORANGE,
+            label: 'Tutorial',
+            style: {
+                font: '19px KenVector Future Thin',
+                fill: 'white',
+                align: 'center'
+            },
+            textX: -1,
+            textY: 0
+        });
+
+        tutorialBtn.anchor.setTo(0.5);
+        this.game.add.existing(tutorialBtn);
+
         let titleTxt = new Phaser.Text(this.game, this.game.world.centerX, 100, 'Hybridation', {
             font: '30px KenVector Future',
             fill: '#000000'
@@ -72,5 +97,9 @@ export default class extends Phaser.State {
 
     restartGame () {
         this.state.start('Battle');
+    }
+
+    startTutorial () {
+        this.state.start('Tutorial');
     }
 }
