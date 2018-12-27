@@ -46,6 +46,14 @@
     "trimmed": false,
     "spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
     "sourceSize": {"w":100,"h":100}
+  },
+  {
+    "filename": "hexButton",
+    "frame": {"x":293,"y":0,"w":190,"h":45},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":0,"y":0,"w":190,"h":45},
+    "sourceSize": {"w":190,"h":45}
   }],
   "meta": {
     "version": "1.0",
