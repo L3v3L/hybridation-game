@@ -251,7 +251,7 @@ export default class extends Phaser.State {
             this.resetTerritories();
             this.updateData();
             this.updateAllScore();
-            this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
+            this.distributeAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
 
             let currentPlayer = this.getNextPlayerWithPruning(playersInGame);
             currentPlayer.act();
@@ -284,7 +284,7 @@ export default class extends Phaser.State {
         }, this);
     }
 
-    distribuiteAttack (player) {
+    distributeAttack (player) {
         //get largest chain
         let highestChain = player.getHighestClusterLength();
         let playersCells = player.getAllCellsInAllClusters();
