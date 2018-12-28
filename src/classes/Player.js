@@ -240,4 +240,28 @@ export default class {
         });
         return cells;
     }
+
+    distributeAttack () {
+        //get largest chain
+        let highestChain = this.getHighestClusterLength();
+        let playersCells = this.getAllCellsInAllClusters();
+
+        if (playersCells.length) {
+            for (let i = 0; i < highestChain; i++) {
+                if (!playersCells.length) {
+                    break;
+                }
+
+                let randomCellId = random(playersCells.length - 1);
+                //remove cell if reached max
+                if (playersCells[randomCellId].attack >= this.game.global.MAX_ATTACK) {
+                    playersCells.splice(randomCellId, 1);
+                    i--;
+                    continue;
+                }
+
+                playersCells[randomCellId].increaseAttack();
+            }
+        }
+    }
 }

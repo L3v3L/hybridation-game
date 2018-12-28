@@ -251,7 +251,7 @@ export default class extends Phaser.State {
             this.resetTerritories();
             this.updateData();
             this.updateAllScore();
-            this.distributeAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
+            this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER].distributeAttack();
 
             let currentPlayer = this.getNextPlayerWithPruning(playersInGame);
             currentPlayer.act();
@@ -282,29 +282,5 @@ export default class extends Phaser.State {
                 }
             }
         }, this);
-    }
-
-    distributeAttack (player) {
-        //get largest chain
-        let highestChain = player.getHighestClusterLength();
-        let playersCells = player.getAllCellsInAllClusters();
-
-        if (playersCells.length) {
-            for (let i = 0; i < highestChain; i++) {
-                if (!playersCells.length) {
-                    break;
-                }
-
-                let randomCellId = random(playersCells.length - 1);
-                //remove cell if reached max
-                if (playersCells[randomCellId].attack >= this.game.global.MAX_ATTACK) {
-                    playersCells.splice(randomCellId, 1);
-                    i--;
-                    continue;
-                }
-
-                playersCells[randomCellId].increaseAttack();
-            }
-        }
     }
 }
