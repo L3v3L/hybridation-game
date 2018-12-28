@@ -253,21 +253,25 @@ export default class extends Phaser.State {
             this.updateAllScore();
             this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
 
-            let currentPlayer = null;
-            let isPlayerInGame = false;
-            do {
-                this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
-                currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
-                isPlayerInGame = false;
-                for (let i = 0; i < playersInGame.length; i++) {
-                    if (playersInGame[i].id === currentPlayer.id) {
-                        isPlayerInGame = true;
-                    }
-                }
-            } while (!isPlayerInGame);
-
+            let currentPlayer = this.getNextPlayerWithPruning(playersInGame);
             currentPlayer.act();
         }
+    }
+
+    getNextPlayerWithPruning (playersInGame) {
+        let currentPlayer = null;
+        let isPlayerInGame = false;
+        do {
+            this.game.global.CURRENT_PLAYER = (this.game.global.CURRENT_PLAYER + 1) % this.game.global.NUMBER_OF_PLAYERS;
+            currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
+            isPlayerInGame = false;
+            for (let i = 0; i < playersInGame.length; i++) {
+                if (playersInGame[i].id === currentPlayer.id) {
+                    isPlayerInGame = true;
+                }
+            }
+        } while (!isPlayerInGame);
+        return currentPlayer;
     }
 
     getPlayersInGame () {
