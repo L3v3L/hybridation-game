@@ -36,7 +36,9 @@ export default class extends Phaser.State {
 
         this.game.global.FIRST_TURN = 1;
 
+        this.resetTerritories();
         this.updateData();
+        this.updateAllScore();
 
         //initialize HUD
         this.game.hud = new Hud({
@@ -192,14 +194,16 @@ export default class extends Phaser.State {
         return cellArray;
     }
 
-    updateData () {
+    resetTerritories () {
         forEach(this.game.global.PLAYER_ARRAY, function (player) {
             //reset clusters
             player.clusters = [];
             //clear territory counts
             player.setTerritory(0);
         });
+    }
 
+    updateData () {
         forEach(this.game.global.ALL_CELLS, function (cell) {
             cell.player.increaseTerritory();
 
@@ -224,7 +228,9 @@ export default class extends Phaser.State {
                 cell.player.clusters.push(newCluster);
             }
         });
+    }
 
+    updateAllScore () {
         forEach(this.game.global.PLAYER_ARRAY, function (player) {
             player.updateScore();
         });
@@ -242,7 +248,9 @@ export default class extends Phaser.State {
             this.state.start('GameOver');
         } else {
             this.game.global.TURN_COUNTER++;
+            this.resetTerritories();
             this.updateData();
+            this.updateAllScore();
             this.distribuiteAttack(this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER]);
 
             let currentPlayer = null;
