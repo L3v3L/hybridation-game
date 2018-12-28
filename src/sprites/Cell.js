@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import color from 'color';
+import { forEach } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, player, state, attack, id, connectionCount}) {
@@ -360,5 +361,30 @@ export default class extends Phaser.Group {
         return arrayOfCells.find(function (cell) {
             return cell.isAdjacentTo(this);
         }, this);
+    }
+
+    joinCellClusters () {
+        let alreadyfoundIn = null;
+
+        this.player.clusters = this.player.clusters.map(function (playerCluster, key) {
+            if (playerCluster && this.isCellConnectedToAnyInCellArray(playerCluster)) {
+                if (alreadyfoundIn !== null) {
+                    this.player.clusters[alreadyfoundIn] = this.player.clusters[alreadyfoundIn].concat(playerCluster);
+                    this.player.clusters[key] = [];
+                    playerCluster = null;
+                } else {
+                    this.clusterBelongs = playerCluster;
+                    playerCluster.push(this);
+                    alreadyfoundIn = key;
+                }
+            }
+            return playerCluster;
+        }, this);
+
+        if (alreadyfoundIn === null) {
+            let newCluster = [this];
+            this.clusterBelongs = newCluster;
+            this.player.clusters.push(newCluster);
+        }
     }
 }

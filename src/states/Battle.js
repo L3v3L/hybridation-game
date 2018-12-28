@@ -206,27 +206,7 @@ export default class extends Phaser.State {
     updateData () {
         forEach(this.game.global.ALL_CELLS, function (cell) {
             cell.player.increaseTerritory();
-
-            let alreadyfoundIn = null;
-            forEach(cell.player.clusters, function (cluster, key) {
-                if (cell.isCellConnectedToAnyInCellArray(cluster)) {
-                    if (alreadyfoundIn !== null) {
-                        cell.player.clusters[alreadyfoundIn] = cell.player.clusters[alreadyfoundIn].concat(cluster);
-                        cell.player.clusters[key] = [];
-                        cluster = null;
-                    } else {
-                        cell.clusterBelongs = cluster;
-                        cluster.push(cell);
-                        alreadyfoundIn = key;
-                    }
-                }
-            });
-
-            if (alreadyfoundIn === null) {
-                let newCluster = [cell];
-                cell.clusterBelongs = newCluster;
-                cell.player.clusters.push(newCluster);
-            }
+            cell.joinCellClusters();
         });
     }
 

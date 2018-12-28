@@ -223,7 +223,11 @@ export default class {
     getHighestClusterLength () {
         let length = 0;
         forEach(this.clusters, function (cluster) {
-            let clusterLength = cluster.length;
+            let clusterLength = 0;
+            if (cluster) {
+                clusterLength = cluster.length;
+            }
+
             if (clusterLength > length) {
                 length = clusterLength;
             }
