@@ -27,7 +27,7 @@ export default class extends Phaser.State {
         this.initPlayers();
 
         //generate tiles
-        let cellArray = this.createWorldArray();
+        let cellArray = this.createWorldArray(this.createPlayerAssignmentArray(), this.createAttackAssignmentArray());
 
         this.game.global.ALL_CELLS = cellArray;
 
@@ -124,12 +124,9 @@ export default class extends Phaser.State {
     /**
      *
      */
-    createWorldArray () {
+    createWorldArray (createPlayerAssignmentArray, attackAssignmentArray) {
         let cellArray = [];
         let cellsToFill = [];
-
-        let createPlayerAssignmentArray = this.createPlayerAssignmentArray();
-        let attackAssignmentArray = this.createAttackAssignmentArray();
 
         for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
             let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % (this.worldWidth * this.worldHeight)]]);
