@@ -2,7 +2,7 @@
 import Phaser from 'phaser';
 import Cell from '../sprites/Cell';
 import globals from '../globals';
-import { cloneDeep, forEach, random, shuffle, floor } from 'lodash';
+import { cloneDeep, forEach, shuffle, floor } from 'lodash';
 import Player from '../classes/Player';
 import Hud from '../classes/Hud';
 import BattleBar from '../classes/BattleBar';
