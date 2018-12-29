@@ -63,8 +63,7 @@ export default class extends Phaser.Group {
      */
     mclick () {
         if (process.env.DEBUG === 'true' && process.env.DEBUG_SKIP_START_MENU === 'true') {
-            console.log(this);
-            window.debugHelper.selectedCell = this;
+            window.debugHelper.selectOutput(this);
         }
 
         let currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
