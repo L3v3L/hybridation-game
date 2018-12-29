@@ -1,7 +1,10 @@
+import Cell from "../sprites/Cell";
+
 export default class {
     constructor (game) {
         this.game = game;
         this.selectedCell = null;
+        this.selectedCellWatchVariable = null;
     }
 
     changeCurrentPlayer (playerId) {
@@ -22,5 +25,28 @@ export default class {
 
     restartBattle () {
         this.game.state.start('Battle');
+    }
+
+    selectOutput (obj) {
+        switch (true) {
+            case obj instanceof Cell:
+
+                if (this.selectedCellWatchVariable) {
+                    if (typeof this.selectedCellWatchVariable === 'string') {
+                        this.selectedCellWatchVariable = [this.selectedCellWatchVariable];
+                    }
+
+                    this.selectedCellWatchVariable.map(function (watch) {
+                        console.log(`${watch}: ${obj[watch]}`);
+                    }, obj);
+                } else {
+                    console.log(obj);
+                }
+
+                this.selectedCell = obj;
+                break;
+            default:
+                break;
+        }
     }
 }
