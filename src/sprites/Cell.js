@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import color from 'color';
+import { forEach } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, player, state, attack, id, connectionCount}) {
