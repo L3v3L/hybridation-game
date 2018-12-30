@@ -196,6 +196,8 @@ export default class extends Phaser.State {
 
     resetTerritories () {
         forEach(this.game.global.PLAYER_ARRAY, function (player) {
+            //reset cells
+            player.cells = [];
             //reset clusters
             player.clusters = [];
             //clear territory counts
@@ -204,9 +206,17 @@ export default class extends Phaser.State {
     }
 
     updateData () {
+        //todo convert to javascript.map
         forEach(this.game.global.ALL_CELLS, function (cell) {
+            //todo fix territory to user player.cell array
             cell.player.increaseTerritory();
-            cell.joinCellClusters();
+            //todo find better way to do this
+            //add all player cells to its array
+            cell.player.cells.push(cell);
+        });
+
+        this.game.global.PLAYER_ARRAY.map((player) => {
+            player.generateClusters();
         });
     }
 
