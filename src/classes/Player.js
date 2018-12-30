@@ -14,6 +14,59 @@ export default class {
         this.timer = this.game.time.create(false);
         this.clusters = [];
         this.playerBadge = null;
+        this.cells = [];
+    }
+
+    generateClusters () {
+        //reset clusters
+        this.clusters = [];
+
+        //create a list of players cell to get processed
+        let toProcess = this.cells.map((item) => {
+            return item;
+        });
+
+        while (toProcess.length) {
+            let middleArray = [];
+            let cluster = [];
+
+            //get first item to process
+            middleArray.push(toProcess.pop());
+
+            while (middleArray.length) {
+                //get first item to find same player connections
+                let pivot = middleArray.pop();
+
+                //get all pivots connections with same player and havent yet been processed
+                let samePlayerConnections = pivot.connections.filter((connCell) => {
+                    if (connCell.player.id === pivot.player.id) {
+                        let tempProcessLength = toProcess.length;
+
+                        toProcess = toProcess.filter(item => {
+                            return (item.id !== connCell.id);
+                        });
+
+                        //only return elements that havent yet been removed from toProcess
+                        return (tempProcessLength !== toProcess.length);
+                    }
+                    return false;
+                });
+
+                //move pivot to cluster
+                cluster.push(pivot);
+                //add new cells
+                middleArray = middleArray.concat(samePlayerConnections);
+
+                //if middleArray empty ship new finished cluster
+                if (middleArray.length === 0 && cluster.length) {
+                    cluster.map((cell) => {
+                        cell.clusterBelongs = cluster;
+                        return cell;
+                    });
+                    this.clusters.push(cluster);
+                }
+            }
+        }
     }
 
     act () {
