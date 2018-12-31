@@ -27,9 +27,7 @@ export default class extends Phaser.State {
         this.initPlayers();
 
         //generate tiles
-        let cellArray = this.createWorldArray(this.createPlayerAssignmentArray(), this.createAttackAssignmentArray());
-
-        this.game.global.ALL_CELLS = cellArray;
+        this.game.global.ALL_CELLS = this.createWorldArray();
 
         //set starting player
         this.game.global.CURRENT_PLAYER = 0;
@@ -123,12 +121,8 @@ export default class extends Phaser.State {
         return attackAssignmentArray;
     }
 
-    /**
-     *
-     */
-    createWorldArray (createPlayerAssignmentArray, attackAssignmentArray) {
+    createArrayCells (createPlayerAssignmentArray, attackAssignmentArray) {
         let cellArray = [];
-        let cellsToFill = [];
 
         for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
             let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % (this.worldWidth * this.worldHeight)]]);
@@ -147,6 +141,12 @@ export default class extends Phaser.State {
             });
             cellArray.push(cell);
         }
+
+        return cellArray;
+    }
+
+    connectCellArray (cellArray) {
+        let cellsToFill = [];
 
         cellArray[0].setPosition([0, 0]);
         cellsToFill.push(cellArray[0]);
@@ -183,14 +183,25 @@ export default class extends Phaser.State {
             }
         }
 
-        //fill x and y and add to game
-        cellArray = cellArray.map(function (item) {
+        return cellArray;
+    }
+
+    addCellsToWorld (cellArray) {
+        return cellArray.map(function (item) {
             item.x = (item.cellX * ((this.cellWidth / 4) * 3)) + this.game.world.centerX;
             item.y = (item.cellY * (this.cellHeight / 2)) + this.game.world.centerY;
             this.game.add.existing(item);
             return item;
         }, this);
+    }
 
+    /**
+     *
+     */
+    createWorldArray () {
+        let cellArray = this.createArrayCells(this.createPlayerAssignmentArray(), this.createAttackAssignmentArray());
+        cellArray = this.connectCellArray(cellArray);
+        cellArray = this.addCellsToWorld(cellArray);
         return cellArray;
     }
 
