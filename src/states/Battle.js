@@ -18,13 +18,14 @@ export default class extends Phaser.State {
         //load globals
         this.initGlobals();
         //set world dimensions
-        this.worldWidth = this.game.global.WORLD_WIDTH;
-        this.worldHeight = this.game.global.WORLD_HEIGHT;
+        this.worldCount = this.game.global.WORLD_WIDTH * this.game.global.WORLD_HEIGHT;
         this.cellWidth = this.game.global.CELL_WIDTH;
         this.cellHeight = this.game.global.CELL_HEIGHT;
 
         //initalze players
         this.initPlayers();
+
+        this.game.global.BATTLE = this;
 
         //generate tiles
         this.game.global.ALL_CELLS = this.createWorldArray();
@@ -74,10 +75,9 @@ export default class extends Phaser.State {
 
     createPlayerAssignmentArray () {
         let playerAssignmentArray = [];
-        let countCells = this.worldWidth * this.worldHeight;
         let countPlayers = this.game.global.PLAYER_ARRAY.length;
         //todo handle floats
-        let amountCellsEachPlayer = countCells / countPlayers;
+        let amountCellsEachPlayer = this.worldCount / countPlayers;
 
         for (let i = 0; i < countPlayers; i++) {
             for (let j = 0; j < amountCellsEachPlayer; j++) {
@@ -89,9 +89,8 @@ export default class extends Phaser.State {
     }
 
     createAttackAssignmentArray () {
-        let countCells = this.worldWidth * this.worldHeight;
         let countPlayers = this.game.global.PLAYER_ARRAY.length;
-        let amountCellsEachPlayer = countCells / countPlayers;
+        let amountCellsEachPlayer = this.worldCount / countPlayers;
 
         let divider = (100 - amountCellsEachPlayer) * 0.01;
         let pie = amountCellsEachPlayer;
@@ -121,11 +120,14 @@ export default class extends Phaser.State {
         return attackAssignmentArray;
     }
 
-    createArrayCells (createPlayerAssignmentArray, attackAssignmentArray) {
+    createArrayCells () {
+        let createPlayerAssignmentArray = this.createPlayerAssignmentArray();
+        let attackAssignmentArray = this.createAttackAssignmentArray();
+
         let cellArray = [];
 
-        for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
-            let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % (this.worldWidth * this.worldHeight)]]);
+        for (let i = 0; i < this.worldCount; i++) {
+            let player = (this.game.global.PLAYER_ARRAY[createPlayerAssignmentArray[i % (this.worldCount)]]);
             let cell = new Cell({
                 game: this.game,
                 x: null,
@@ -199,7 +201,7 @@ export default class extends Phaser.State {
      *
      */
     createWorldArray () {
-        let cellArray = this.createArrayCells(this.createPlayerAssignmentArray(), this.createAttackAssignmentArray());
+        let cellArray = this.createArrayCells();
         cellArray = this.connectCellArray(cellArray);
         cellArray = this.addCellsToWorld(cellArray);
         return cellArray;
@@ -271,7 +273,7 @@ export default class extends Phaser.State {
 
     getPlayersInGame () {
         return this.game.global.PLAYER_ARRAY.filter(function (player) {
-            for (let i = 0; i < this.worldWidth * this.worldHeight; i++) {
+            for (let i = 0; i < this.worldCount; i++) {
                 if (this.game.global.ALL_CELLS[i].player.id === player.id) {
                     return true;
                 }
