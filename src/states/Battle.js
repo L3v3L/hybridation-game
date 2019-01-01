@@ -211,19 +211,13 @@ export default class extends Phaser.State {
             player.cells = [];
             //reset clusters
             player.clusters = [];
-            //clear territory counts
-            player.setTerritory(0);
         });
     }
 
     updateData () {
-        //todo convert to javascript.map
-        forEach(this.game.global.ALL_CELLS, function (cell) {
-            //todo fix territory to user player.cell array
-            cell.player.increaseTerritory();
-            //todo find better way to do this
-            //add all player cells to its array
+        this.game.global.ALL_CELLS = this.game.global.ALL_CELLS.map((cell) => {
             cell.player.cells.push(cell);
+            return cell;
         });
 
         this.game.global.PLAYER_ARRAY.map((player) => {

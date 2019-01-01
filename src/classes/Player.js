@@ -9,7 +9,6 @@ export default class {
         this.tint = tint;
         this.isAI = isAI;
         this.selectedCell = null;
-        this.territory = 0;
         this.score = 0;
         this.timer = this.game.time.create(false);
         this.clusters = [];
@@ -196,10 +195,6 @@ export default class {
      * @param {*} absorbedCell
      */
     takeControlOfCell (absorbedCell) {
-        //Before absorbing the territory, update territory count
-        this.increaseTerritory();
-        absorbedCell.player.decreaseTerritory();
-
         //Take the absorbedCell as our own
         absorbedCell.player = this;
 
@@ -245,28 +240,12 @@ export default class {
         }
     }
 
-    getScore (score) {
-        return this.score;
-    }
-
     setScore (score) {
         this.score = score;
     }
 
-    getTerritory (count) {
-        this.territory = count;
-    }
-
-    setTerritory (count) {
-        this.territory = count;
-    }
-
-    increaseTerritory () {
-        this.territory = this.territory + 1;
-    }
-
-    decreaseTerritory () {
-        this.territory = this.territory - 1;
+    getTerritory () {
+        return this.cells.length;
     }
 
     endTurn () {

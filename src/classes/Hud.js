@@ -70,18 +70,17 @@ export default class Hud extends Phaser.Group {
 
     updatePlayers () {
         this.currentPlayer = this.game.global.PLAYER_ARRAY[this.game.global.CURRENT_PLAYER];
-
-        for (let [index, player] of this.game.global.PLAYER_ARRAY.entries()) {
-            this.playerBadges[index].updateName(player.name);
-            this.playerBadges[index].updateTerritory(player.territory);
-            this.playerBadges[index].updateScore(player.score);
+        this.game.global.PLAYER_ARRAY.map((item, index) => {
+            this.playerBadges[index].updateName();
+            this.playerBadges[index].updateTerritory();
+            this.playerBadges[index].updateScore();
 
             if (index === this.game.global.CURRENT_PLAYER) {
                 this.playerBadges[index].activate();
             } else {
                 this.playerBadges[index].deactivate();
             }
-        }
+        });
     }
 
     update () {

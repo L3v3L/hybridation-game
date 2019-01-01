@@ -45,7 +45,7 @@ export default class PlayerBadge extends Phaser.Group {
         this.playerNameObj.setShadow(2, 2, 'black');
         this.playerNameObj.anchor.setTo(0.5);
 
-        let percentOwned = this.player.territory / (this.game.global.WORLD_WIDTH * this.game.global.WORLD_HEIGHT) * 100;
+        let percentOwned = this.player.getTerritory() / (this.game.global.WORLD_WIDTH * this.game.global.WORLD_HEIGHT) * 100;
         this.playerTerritoryObj = new Phaser.Text(this.game, x + 85, y - 17, percentOwned.toFixed(0) + '%', this.greySmallText);
         this.playerTerritoryObj.anchor.setTo(1, 0);
 
@@ -63,20 +63,20 @@ export default class PlayerBadge extends Phaser.Group {
 
     update () {
         this.playerNameObj.text = this.player.name;
-        this.playerTerritoryObj.text = this.player.territory;
+        this.playerTerritoryObj.text = this.player.getTerritory();
         this.playerScore.text = this.player.score;
     }
 
-    updateScore (score) {
+    updateScore () {
         this.playerScoreObj.text = this.player.score;
     }
 
-    updateTerritory (territory) {
-        let percentOwned = this.player.territory / (this.game.global.WORLD_WIDTH * this.game.global.WORLD_HEIGHT) * 100;
+    updateTerritory () {
+        let percentOwned = this.player.getTerritory() / (this.game.global.WORLD_WIDTH * this.game.global.WORLD_HEIGHT) * 100;
         this.playerTerritoryObj.text = percentOwned.toFixed(0) + '%';
     }
 
-    updateName (name) {
+    updateName () {
         this.playerNameObj.text = this.player.name;
     }
 
