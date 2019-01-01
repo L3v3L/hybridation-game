@@ -18,7 +18,7 @@ export default class extends Phaser.State {
         //load globals
         this.initGlobals();
         //set world dimensions
-        this.worldCount = this.game.global.WORLD_WIDTH * this.game.global.WORLD_HEIGHT;
+        this.worldCount = this.game.global.WORLD_COUNT;
         this.cellWidth = this.game.global.CELL_WIDTH;
         this.cellHeight = this.game.global.CELL_HEIGHT;
 
