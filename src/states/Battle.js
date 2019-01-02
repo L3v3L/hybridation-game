@@ -148,6 +148,19 @@ export default class extends Phaser.State {
     }
 
     connectCellArray (cellArray) {
+        let holeArray = [
+            [-3, -9],
+            [-3, -7],
+            [-3, -5],
+            [-3, -3],
+            [-3, -1],
+            [-2, -4],
+            [-1, -5],
+            [-1, -3],
+            [-1, -1],
+            [-1, -7]
+        ];
+
         let cellsToFill = [];
 
         cellArray[0].setPosition([0, 0]);
@@ -159,8 +172,21 @@ export default class extends Phaser.State {
             if (selectedNode !== -1) {
                 //search for cell with specific coordinate
                 let nextCor = selectedCell.getNextPosition(selectedNode);
+
+                //check if map requests hole in this position
+                let found = holeArray.find(item => {
+                    return (nextCor[0] === item[0] && nextCor[1] === item[1]);
+                });
+
+                if (found) {
+                    selectedCell.connections[selectedNode] = null;
+                    cellsToFill.push(selectedCell);
+                    continue;
+                }
+
                 let connectionMade = false;
 
+                //see if a cell in the to fill array exists with diseried coors
                 for (let i = 0; i < cellsToFill.length; i++) {
                     if (cellsToFill[i].getPosition() === nextCor) {
                         selectedCell.connectNode(cellsToFill[i], selectedNode);
@@ -171,7 +197,9 @@ export default class extends Phaser.State {
                 }
 
                 if (!connectionMade) {
+                    //see if a cell in the to fill array exists with diseried coors
                     for (let i = 0; i < cellArray.length; i++) {
+                        //find any cell without a position yet
                         if (cellArray[i].getPosition() === null) {
                             let newCellToAdd = cellArray[i];
                             newCellToAdd.setPosition(nextCor);
@@ -184,6 +212,15 @@ export default class extends Phaser.State {
                 }
             }
         }
+
+        cellArray = cellArray.map((cell) => {
+            for (let index = 0; index < cell.connections.length; index++) {
+                if (cell.connections[index] === null) {
+                    delete (cell.connections[index]);
+                }
+            }
+            return cell;
+        });
 
         return cellArray;
     }

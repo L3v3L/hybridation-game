@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import color from 'color';
-import { forEach } from 'lodash';
 
 export default class extends Phaser.Group {
     constructor ({game, x, y, asset, width, height, player, state, attack, id, connectionCount}) {
@@ -262,7 +261,7 @@ export default class extends Phaser.Group {
     connectNode (cell, direction) {
         direction = this.limPos(direction);
 
-        if (typeof cell === 'undefined') {
+        if (typeof cell === 'undefined' || cell === null) {
             return;
         }
 
