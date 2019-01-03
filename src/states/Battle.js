@@ -186,7 +186,7 @@ export default class extends Phaser.State {
 
                 let connectionMade = false;
 
-                //see if a cell in the to fill array exists with diseried coors
+                //check if a cell with the desired coordinates exists in the to-fill array
                 for (let i = 0; i < cellsToFill.length; i++) {
                     if (cellsToFill[i].getPosition() === nextCor) {
                         selectedCell.connectNode(cellsToFill[i], selectedNode);
@@ -197,7 +197,7 @@ export default class extends Phaser.State {
                 }
 
                 if (!connectionMade) {
-                    //see if a cell in the to fill array exists with diseried coors
+                    //check if a cell with the desired coordinates exists in the to-fill array
                     for (let i = 0; i < cellArray.length; i++) {
                         //find any cell without a position yet
                         if (cellArray[i].getPosition() === null) {
