@@ -64,7 +64,7 @@ export default class extends Phaser.State {
                 x: this.game.world.centerX,
                 y: this.game.world.centerY + 100,
                 asset: 'greySheet',
-                callback: this.startTutorial,
+                callback: this.startCreate,
                 callbackContext: this,
                 overFrame: 'button0',
                 outFrame: 'button0',
@@ -131,6 +131,6 @@ export default class extends Phaser.State {
     }
 
     startCreate () {
-        this.state.start('Battle');
+        this.state.start('LevelCreate');
     }
 }

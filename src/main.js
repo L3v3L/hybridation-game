@@ -9,6 +9,7 @@ import BattleState from './states/Battle';
 import GameOverState from './states/GameOver';
 import StartMenu from './states/StartMenu';
 import Tutorial from './states/Tutorial';
+import LevelCreate from './states/LevelCreate';
 
 import config from './config';
 
@@ -26,6 +27,7 @@ class Game extends Phaser.Game {
         this.state.add('GameOver', GameOverState, false);
         this.state.add('StartMenu', StartMenu, false);
         this.state.add('Tutorial', Tutorial, false);
+        this.state.add('LevelCreate', LevelCreate, false);
 
         if (process.env.DEBUG === 'true') {
             //add debugHelper to window
